@@ -3,8 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    unoptimized: true
-  }
-}
+    domains: ["images.unsplash.com", "via.placeholder.com"],
+    formats: ["image/webp", "image/avif"],
+  },
+};
 
 module.exports = nextConfig
