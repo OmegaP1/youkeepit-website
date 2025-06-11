@@ -159,13 +159,13 @@ export const PRICING_PLANS = [
       "Up to 50 devices/year",
       "Basic marketplace",
       "Email support",
-      "Standard data wiping"
+      "Standard data wiping",
     ],
-    popular: false
+    popular: false,
   },
   {
     name: "Professional",
-    price: "$2,999",
+    price: "$999",
     period: "/month",
     description: "Most popular for growing companies",
     features: [
@@ -173,9 +173,9 @@ export const PRICING_PLANS = [
       "Advanced analytics",
       "Priority support",
       "Custom branding",
-      "API access"
+      "API access",
     ],
-    popular: true
+    popular: true,
   },
   {
     name: "Enterprise",
@@ -187,11 +187,11 @@ export const PRICING_PLANS = [
       "Dedicated success manager",
       "Custom integrations",
       "Advanced compliance",
-      "SLA guarantee"
+      "SLA guarantee",
     ],
-    popular: false
-  }
-]
+    popular: false,
+  },
+];
 
 // FAQ items
 export const FAQ_ITEMS = [

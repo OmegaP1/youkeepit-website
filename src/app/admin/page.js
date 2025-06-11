@@ -10,58 +10,66 @@ const EXAMPLE_CONSTANTS = {
     name: "YouKeepIt",
     email: "contact@youkeepit.com",
     phone: "+1 (555) 123-4567",
-    address: "123 Business Ave, City, State 12345"
+    address: "123 Business Ave, City, State 12345",
   },
   HERO_CONTENT: {
     headline: "Transform Your IT Equipment Transitions",
-    subheadline: "The smart SaaS solution that helps companies manage equipment handovers, sell refurbished devices to employees, and maintain complete IT asset visibility.",
+    subheadline:
+      "The smart SaaS solution that helps companies manage equipment handovers, sell refurbished devices to employees, and maintain complete IT asset visibility.",
     ctaText: "Get Started Today",
-    secondaryCtaText: "Schedule Demo"
+    secondaryCtaText: "Schedule Demo",
   },
   HOW_IT_WORKS: [
     {
       step: 1,
       title: "Employee Departure",
-      description: "Automated workflows trigger when employees leave, ensuring nothing falls through the cracks.",
-      color: "bg-blue-600"
+      description:
+        "Automated workflows trigger when employees leave, ensuring nothing falls through the cracks.",
+      color: "bg-blue-600",
     },
     {
       step: 2,
       title: "Device Assessment",
-      description: "AI-powered evaluation determines optimal pricing and refurbishment needs for maximum value recovery.",
-      color: "bg-green-600"
+      description:
+        "AI-powered evaluation determines optimal pricing and refurbishment needs for maximum value recovery.",
+      color: "bg-green-600",
     },
     {
       step: 3,
       title: "Secure Transfer",
-      description: "Automated data wiping, documentation, and secure handover process with full compliance tracking.",
-      color: "bg-purple-600"
-    }
+      description:
+        "Automated data wiping, documentation, and secure handover process with full compliance tracking.",
+      color: "bg-purple-600",
+    },
   ],
   FEATURES_LIST: [
     {
       title: "Enterprise Security",
-      description: "Military-grade encryption and compliance with SOC 2, GDPR, and industry standards.",
-      icon: "🔒"
+      description:
+        "Military-grade encryption and compliance with SOC 2, GDPR, and industry standards.",
+      icon: "🔒",
     },
     {
       title: "Employee Portal",
-      description: "Self-service marketplace where employees can browse, purchase, and track their orders.",
-      icon: "👥"
+      description:
+        "Self-service marketplace where employees can browse, purchase, and track their orders.",
+      icon: "👥",
     },
     {
       title: "Analytics Dashboard",
-      description: "Real-time insights into asset recovery, cost savings, and environmental impact.",
-      icon: "📊"
-    }
+      description:
+        "Real-time insights into asset recovery, cost savings, and environmental impact.",
+      icon: "📊",
+    },
   ],
   TESTIMONIALS: [
     {
       name: "Sarah Chen",
       role: "IT Director, TechCorp",
-      content: "YouKeepIt transformed our equipment transition process. We've recovered over $500k in value this year alone while making our employees happy.",
-      rating: 5
-    }
+      content:
+        "YouKeepIt transformed our equipment transition process. We've recovered over $500k in value this year alone while making our employees happy.",
+      rating: 5,
+    },
   ],
   PRICING_PLANS: [
     {
@@ -73,13 +81,13 @@ const EXAMPLE_CONSTANTS = {
         "Up to 50 devices/year",
         "Basic marketplace",
         "Email support",
-        "Standard data wiping"
+        "Standard data wiping",
       ],
-      popular: false
+      popular: false,
     },
     {
       name: "Professional",
-      price: "$2,999",
+      price: "$999",
       period: "/month",
       description: "Most popular for growing companies",
       features: [
@@ -87,21 +95,23 @@ const EXAMPLE_CONSTANTS = {
         "Advanced analytics",
         "Priority support",
         "Custom branding",
-        "API access"
+        "API access",
       ],
-      popular: true
-    }
+      popular: true,
+    },
   ],
   FAQ_ITEMS: [
     {
       question: "How quickly can we implement YouKeepIt?",
-      answer: "Most companies are up and running within 24 hours. Our onboarding team guides you through the simple setup process, and integration with existing systems typically takes just a few hours."
+      answer:
+        "Most companies are up and running within 24 hours. Our onboarding team guides you through the simple setup process, and integration with existing systems typically takes just a few hours.",
     },
     {
       question: "What happens to sensitive data on devices?",
-      answer: "We use military-grade data wiping procedures that exceed DOD 5220.22-M standards. All data destruction is certified and documented for compliance purposes."
-    }
-  ]
+      answer:
+        "We use military-grade data wiping procedures that exceed DOD 5220.22-M standards. All data destruction is certified and documented for compliance purposes.",
+    },
+  ],
 };
 
 // src/app/admin/page.js

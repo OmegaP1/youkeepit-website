@@ -43,9 +43,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      darkMode ? 'dark bg-gray-900' : 'bg-white'
-    }`}>
+    <div
+      className={`min-h-screen transition-colors duration-300 ${
+        darkMode ? "dark bg-gray-900" : "bg-white"
+      }`}
+    >
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <main>
         <Hero darkMode={darkMode} />
@@ -53,11 +55,10 @@ export default function HomePage() {
         <HowItWorks darkMode={darkMode} />
         <Benefits darkMode={darkMode} />
         <Features darkMode={darkMode} />
-        <Testimonials darkMode={darkMode} />
         <Pricing darkMode={darkMode} />
         <FAQ darkMode={darkMode} />
       </main>
       <Footer darkMode={darkMode} />
     </div>
-  )
+  );
 }

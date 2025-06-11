@@ -8,85 +8,98 @@ const DEFAULT_CONSTANTS = {
     name: "YouKeepIt",
     email: "contact@youkeepit.com",
     phone: "+1 (555) 123-4567",
-    address: "123 Business Ave, City, State 12345"
+    address: "123 Business Ave, City, State 12345",
   },
   HERO_CONTENT: {
     headline: "Transform Your IT Equipment Transitions",
-    subheadline: "The smart SaaS solution that helps companies manage equipment handovers, sell refurbished devices to employees, and maintain complete IT asset visibility.",
+    subheadline:
+      "The smart SaaS solution that helps companies manage equipment handovers, sell refurbished devices to employees, and maintain complete IT asset visibility.",
     ctaText: "Get Started Today",
-    secondaryCtaText: "Schedule Demo"
+    secondaryCtaText: "Schedule Demo",
   },
   HOW_IT_WORKS: [
     {
       step: 1,
       title: "Employee Departure",
-      description: "Automated workflows trigger when employees leave, ensuring nothing falls through the cracks.",
-      color: "bg-blue-600"
+      description:
+        "Automated workflows trigger when employees leave, ensuring nothing falls through the cracks.",
+      color: "bg-blue-600",
     },
     {
       step: 2,
       title: "Device Assessment",
-      description: "AI-powered evaluation determines optimal pricing and refurbishment needs for maximum value recovery.",
-      color: "bg-green-600"
+      description:
+        "AI-powered evaluation determines optimal pricing and refurbishment needs for maximum value recovery.",
+      color: "bg-green-600",
     },
     {
       step: 3,
       title: "Secure Transfer",
-      description: "Automated data wiping, documentation, and secure handover process with full compliance tracking.",
-      color: "bg-purple-600"
-    }
+      description:
+        "Automated data wiping, documentation, and secure handover process with full compliance tracking.",
+      color: "bg-purple-600",
+    },
   ],
   FEATURES_LIST: [
     {
       title: "Enterprise Security",
-      description: "Military-grade encryption and compliance with SOC 2, GDPR, and industry standards.",
-      icon: "🔒"
+      description:
+        "Military-grade encryption and compliance with SOC 2, GDPR, and industry standards.",
+      icon: "🔒",
     },
     {
       title: "Employee Portal",
-      description: "Self-service marketplace where employees can browse, purchase, and track their orders.",
-      icon: "👥"
+      description:
+        "Self-service marketplace where employees can browse, purchase, and track their orders.",
+      icon: "👥",
     },
     {
       title: "Analytics Dashboard",
-      description: "Real-time insights into asset recovery, cost savings, and environmental impact.",
-      icon: "📊"
+      description:
+        "Real-time insights into asset recovery, cost savings, and environmental impact.",
+      icon: "📊",
     },
     {
       title: "Automated Workflows",
-      description: "Streamlined processes for device preparation, data wiping, and documentation.",
-      icon: "⚙️"
+      description:
+        "Streamlined processes for device preparation, data wiping, and documentation.",
+      icon: "⚙️",
     },
     {
       title: "Integration Ready",
-      description: "Seamlessly connects with your existing HRIS, asset management, and IT systems.",
-      icon: "🔗"
+      description:
+        "Seamlessly connects with your existing HRIS, asset management, and IT systems.",
+      icon: "🔗",
     },
     {
       title: "White-Label Option",
-      description: "Customize the platform with your branding for a seamless employee experience.",
-      icon: "🎨"
-    }
+      description:
+        "Customize the platform with your branding for a seamless employee experience.",
+      icon: "🎨",
+    },
   ],
   TESTIMONIALS: [
     {
       name: "Sarah Chen",
       role: "IT Director, TechCorp",
-      content: "YouKeepIt transformed our equipment transition process. We've recovered over $500k in value this year alone while making our employees happy.",
-      rating: 5
+      content:
+        "YouKeepIt transformed our equipment transition process. We've recovered over $500k in value this year alone while making our employees happy.",
+      rating: 5,
     },
     {
       name: "Marcus Rodriguez",
       role: "HR Manager, GrowthCo",
-      content: "The employee marketplace is brilliant. Our staff love getting quality devices at great prices, and we've eliminated equipment storage costs.",
-      rating: 5
+      content:
+        "The employee marketplace is brilliant. Our staff love getting quality devices at great prices, and we've eliminated equipment storage costs.",
+      rating: 5,
     },
     {
       name: "Emma Thompson",
       role: "CFO, ScaleTech",
-      content: "The ROI was immediate. We implemented YouKeepIt in one day and started seeing savings within the first week. Incredible platform.",
-      rating: 5
-    }
+      content:
+        "The ROI was immediate. We implemented YouKeepIt in one day and started seeing savings within the first week. Incredible platform.",
+      rating: 5,
+    },
   ],
   PRICING_PLANS: [
     {
@@ -98,13 +111,13 @@ const DEFAULT_CONSTANTS = {
         "Up to 50 devices/year",
         "Basic marketplace",
         "Email support",
-        "Standard data wiping"
+        "Standard data wiping",
       ],
-      popular: false
+      popular: false,
     },
     {
       name: "Professional",
-      price: "$2,999",
+      price: "$999",
       period: "/month",
       description: "Most popular for growing companies",
       features: [
@@ -112,9 +125,9 @@ const DEFAULT_CONSTANTS = {
         "Advanced analytics",
         "Priority support",
         "Custom branding",
-        "API access"
+        "API access",
       ],
-      popular: true
+      popular: true,
     },
     {
       name: "Enterprise",
@@ -126,33 +139,38 @@ const DEFAULT_CONSTANTS = {
         "Dedicated success manager",
         "Custom integrations",
         "Advanced compliance",
-        "SLA guarantee"
+        "SLA guarantee",
       ],
-      popular: false
-    }
+      popular: false,
+    },
   ],
   FAQ_ITEMS: [
     {
       question: "How quickly can we implement YouKeepIt?",
-      answer: "Most companies are up and running within 24 hours. Our onboarding team guides you through the simple setup process, and integration with existing systems typically takes just a few hours."
+      answer:
+        "Most companies are up and running within 24 hours. Our onboarding team guides you through the simple setup process, and integration with existing systems typically takes just a few hours.",
     },
     {
       question: "What happens to sensitive data on devices?",
-      answer: "We use military-grade data wiping procedures that exceed DOD 5220.22-M standards. All data destruction is certified and documented for compliance purposes."
+      answer:
+        "We use military-grade data wiping procedures that exceed DOD 5220.22-M standards. All data destruction is certified and documented for compliance purposes.",
     },
     {
       question: "How do you determine device pricing for employees?",
-      answer: "Our AI-powered pricing engine considers market value, device condition, age, and specs to offer fair pricing that benefits both the company and employees."
+      answer:
+        "Our AI-powered pricing engine considers market value, device condition, age, and specs to offer fair pricing that benefits both the company and employees.",
     },
     {
       question: "Can employees finance their purchases?",
-      answer: "Yes, we offer flexible payment options including payroll deduction, monthly payment plans, and third-party financing options."
+      answer:
+        "Yes, we offer flexible payment options including payroll deduction, monthly payment plans, and third-party financing options.",
     },
     {
       question: "What kind of support do you provide?",
-      answer: "We offer 24/7 technical support, dedicated customer success managers for Enterprise clients, and comprehensive documentation and training resources."
-    }
-  ]
+      answer:
+        "We offer 24/7 technical support, dedicated customer success managers for Enterprise clients, and comprehensive documentation and training resources.",
+    },
+  ],
 };
 
 const useConstants = () => {

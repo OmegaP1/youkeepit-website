@@ -13,14 +13,14 @@ const Pricing = ({ darkMode }) => {
         "Live platform demonstration",
         "Personalized consultation",
         "ROI analysis for your company",
-        "Implementation timeline"
+        "Implementation timeline",
       ],
       popular: false,
-      isDemo: true
+      isDemo: true,
     },
     {
       name: "Professional",
-      price: "$2,999",
+      price: "$999",
       period: "/month",
       description: "Most popular for growing companies",
       features: [
@@ -28,10 +28,10 @@ const Pricing = ({ darkMode }) => {
         "Advanced analytics",
         "Priority support",
         "Custom branding",
-        "API access"
+        "API access",
       ],
       popular: true,
-      isDemo: false
+      isDemo: false,
     },
     {
       name: "Enterprise",
@@ -43,12 +43,12 @@ const Pricing = ({ darkMode }) => {
         "Dedicated success manager",
         "Custom integrations",
         "Advanced compliance",
-        "SLA guarantee"
+        "SLA guarantee",
       ],
       popular: false,
-      isDemo: false
-    }
-  ]
+      isDemo: false,
+    },
+  ];
 
   return (
     <section id="pricing" className={`py-20 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
