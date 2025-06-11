@@ -1,0 +1,32 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+  
+  <!-- Shield Icon -->
+  <path d="M16 4L22 7V14C22 18.5 19 22.58 16 24C13 22.58 10 18.5 10 14V7L16 4Z" 
+        fill="white" 
+        stroke="none"/>
+  
+  <!-- Refresh Arrow -->
+  <path d="M20 9.5C20 9.5 19.5 8 16 8C13.5 8 12 9.5 12 11.5C12 13.5 13.5 15 16 15C18.5 15 20 13.5 20 11.5" 
+        stroke="white" 
+        stroke-width="1.5" 
+        stroke-linecap="round" 
+        fill="none"/>
+  
+  <!-- Arrow Head -->
+  <path d="M18.5 9L20 9.5L19.5 11" 
+        stroke="white" 
+        stroke-width="1.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        fill="none"/>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

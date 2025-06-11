@@ -25,25 +25,36 @@ const Benefits = ({ darkMode }) => {
   ]
 
   return (
-    <section id="benefits" className={`py-20 ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+    <section
+      id="benefits"
+      className={`py-20 ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className={`text-3xl md:text-4xl font-bold mb-8 ${
-              darkMode ? 'text-white' : 'text-gray-900'
-            }`}>
+            <h2
+              className={`text-3xl md:text-4xl font-bold mb-8 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               Benefits for Everyone
             </h2>
-            
+
             <div className="space-y-6">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start space-x-4">
                   <div className="text-2xl">{benefit.icon}</div>
                   <div>
-                    <h3 className={`text-lg font-semibold mb-2 ${benefit.color}`}>
+                    <h3
+                      className={`text-lg font-semibold mb-2 ${benefit.color}`}
+                    >
                       {benefit.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       {benefit.description}
                     </p>
                   </div>
@@ -52,34 +63,92 @@ const Benefits = ({ darkMode }) => {
             </div>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white shadow-2xl">
-            <h3 className="text-2xl font-bold mb-6 text-gray-900">
+          <div
+            className={`p-8 rounded-2xl shadow-2xl ${
+              darkMode ? "bg-gray-900 border border-gray-700" : "bg-white"
+            }`}
+          >
+            <h3
+              className={`text-2xl font-bold mb-6 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               ROI Calculator
             </h3>
-            
+
             <div className="space-y-4">
-              <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                <span className="text-gray-600">Devices per year</span>
-                <span className="font-semibold text-gray-900">250</span>
+              <div
+                className={`flex justify-between items-center py-3 border-b ${
+                  darkMode ? "border-gray-700" : "border-gray-200"
+                }`}
+              >
+                <span
+                  className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}
+                >
+                  Devices per year
+                </span>
+                <span
+                  className={`font-semibold ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  250
+                </span>
               </div>
-              <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                <span className="text-gray-600">Avg. device value</span>
-                <span className="font-semibold text-gray-900">$1,200</span>
+              <div
+                className={`flex justify-between items-center py-3 border-b ${
+                  darkMode ? "border-gray-700" : "border-gray-200"
+                }`}
+              >
+                <span
+                  className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}
+                >
+                  Avg. device value
+                </span>
+                <span
+                  className={`font-semibold ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  $1,200
+                </span>
               </div>
-              <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                <span className="text-gray-600">Recovery rate</span>
+              <div
+                className={`flex justify-between items-center py-3 border-b ${
+                  darkMode ? "border-gray-700" : "border-gray-200"
+                }`}
+              >
+                <span
+                  className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}
+                >
+                  Recovery rate
+                </span>
                 <span className="font-semibold text-green-600">70%</span>
               </div>
-              <div className="flex justify-between items-center py-4 bg-green-50 rounded-lg px-4">
-                <span className="font-semibold text-gray-900">Annual Savings</span>
-                <span className="text-2xl font-bold text-green-600">$210,000</span>
+              <div
+                className={`flex justify-between items-center py-4 rounded-lg px-4 ${
+                  darkMode
+                    ? "bg-green-900/20 border border-green-800"
+                    : "bg-green-50"
+                }`}
+              >
+                <span
+                  className={`font-semibold ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  Annual Savings
+                </span>
+                <span className="text-2xl font-bold text-green-600">
+                  $210,000
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 export default Benefits
