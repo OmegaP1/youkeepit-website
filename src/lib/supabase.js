@@ -1,102 +1,122 @@
 // src/lib/supabase.js
-import { createClient } from '@supabase/supabase-js'
+// Enhanced Supabase configuration with error handling and connection management
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables. Please check your .env.local file.');
+}
 
-// Database Tables Schema:
-// 
-// 1. site_content (General site content)
-// CREATE TABLE site_content (
-//   id SERIAL PRIMARY KEY,
-//   section_name VARCHAR(100) NOT NULL,
-//   content_key VARCHAR(100) NOT NULL,
-//   content_value TEXT,
-//   content_type VARCHAR(50) DEFAULT 'text', -- text, json, image_url
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW(),
-//   UNIQUE(section_name, content_key)
-// );
-//
-// 2. features (Features section)
-// CREATE TABLE features (
-//   id SERIAL PRIMARY KEY,
-//   title VARCHAR(200) NOT NULL,
-//   description TEXT,
-//   icon VARCHAR(10),
-//   order_index INTEGER DEFAULT 0,
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW()
-// );
-//
-// 3. testimonials (Testimonials section)
-// CREATE TABLE testimonials (
-//   id SERIAL PRIMARY KEY,
-//   name VARCHAR(100) NOT NULL,
-//   role VARCHAR(100),
-//   content TEXT NOT NULL,
-//   rating INTEGER DEFAULT 5,
-//   company VARCHAR(100),
-//   image_url VARCHAR(500),
-//   order_index INTEGER DEFAULT 0,
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW()
-// );
-//
-// 4. pricing_plans (Pricing section)
-// CREATE TABLE pricing_plans (
-//   id SERIAL PRIMARY KEY,
-//   name VARCHAR(100) NOT NULL,
-//   price VARCHAR(50),
-//   period VARCHAR(50),
-//   description TEXT,
-//   features JSONB, -- Array of features
-//   is_popular BOOLEAN DEFAULT false,
-//   order_index INTEGER DEFAULT 0,
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW()
-// );
-//
-// 5. faq_items (FAQ section)
-// CREATE TABLE faq_items (
-//   id SERIAL PRIMARY KEY,
-//   question TEXT NOT NULL,
-//   answer TEXT NOT NULL,
-//   category VARCHAR(100),
-//   order_index INTEGER DEFAULT 0,
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW()
-// );
-//
-// 6. navigation_items (Navigation menu)
-// CREATE TABLE navigation_items (
-//   id SERIAL PRIMARY KEY,
-//   label VARCHAR(100) NOT NULL,
-//   href VARCHAR(200) NOT NULL,
-//   order_index INTEGER DEFAULT 0,
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW()
-// );
-//
-// 7. company_stats (Statistics displayed on site)
-// CREATE TABLE company_stats (
-//   id SERIAL PRIMARY KEY,
-//   value VARCHAR(50) NOT NULL,
-//   label VARCHAR(100) NOT NULL,
-//   description TEXT,
-//   color VARCHAR(50),
-//   order_index INTEGER DEFAULT 0,
-//   is_active BOOLEAN DEFAULT true,
-//   created_at TIMESTAMP DEFAULT NOW(),
-//   updated_at TIMESTAMP DEFAULT NOW()
-// );
+// Create Supabase client with enhanced configuration
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10
+    }
+  }
+});
 
-export default supabase
+// Database helper functions
+export const dbHelpers = {
+  // Generic fetch function with error handling
+  async fetchData(table, options = {}) {
+    try {
+      let query = supabase.from(table).select('*');
+      
+      if (options.filter) {
+        query = query.eq(options.filter.column, options.filter.value);
+      }
+      
+      if (options.orderBy) {
+        query = query.order(options.orderBy.column, { 
+          ascending: options.orderBy.ascending ?? true 
+        });
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      return { data, error: null };
+    } catch (error) {
+      console.error(`Error fetching from ${table}:`, error);
+      return { data: null, error };
+    }
+  },
+
+  // Generic insert function
+  async insertData(table, data) {
+    try {
+      const { data: result, error } = await supabase
+        .from(table)
+        .insert([data])
+        .select();
+      
+      if (error) throw error;
+      return { data: result?.[0], error: null };
+    } catch (error) {
+      console.error(`Error inserting into ${table}:`, error);
+      return { data: null, error };
+    }
+  },
+
+  // Generic update function
+  async updateData(table, id, data) {
+    try {
+      const { data: result, error } = await supabase
+        .from(table)
+        .update({ ...data, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .select();
+      
+      if (error) throw error;
+      return { data: result?.[0], error: null };
+    } catch (error) {
+      console.error(`Error updating ${table}:`, error);
+      return { data: null, error };
+    }
+  },
+
+  // Generic soft delete function
+  async softDelete(table, id) {
+    try {
+      const { data, error } = await supabase
+        .from(table)
+        .update({ 
+          is_active: false, 
+          updated_at: new Date().toISOString() 
+        })
+        .eq('id', id)
+        .select();
+      
+      if (error) throw error;
+      return { data: data?.[0], error: null };
+    } catch (error) {
+      console.error(`Error soft deleting from ${table}:`, error);
+      return { data: null, error };
+    }
+  }
+};
+
+// Connection test function
+export const testConnection = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('count', { count: 'exact', head: true });
+    
+    if (error) throw error;
+    return { connected: true, error: null };
+  } catch (error) {
+    console.error('Supabase connection test failed:', error);
+    return { connected: false, error };
+  }
+};
+
+export default supabase;
