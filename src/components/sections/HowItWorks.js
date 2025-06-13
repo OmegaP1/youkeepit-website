@@ -1,86 +1,200 @@
-'use client'
+// src/components/sections/HowItWorks.js
+"use client";
 
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { DatabaseService } from "@/services/database";
 
 const HowItWorks = ({ darkMode }) => {
-  const steps = [
+  const [siteContent, setSiteContent] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  // Default steps as fallback
+  const defaultSteps = [
     {
       step: 1,
-      title: 'Upload Inventory',
-      description: 'Simply upload your device inventory or integrate with existing asset management systems.',
-      color: 'bg-blue-600'
+      title: "Upload Inventory",
+      description:
+        "Simply upload your device inventory or integrate with existing asset management systems.",
+      color: "bg-blue-600",
     },
     {
       step: 2,
-      title: 'Employee Marketplace',
-      description: 'Employees browse available devices at discounted rates through our secure platform.',
-      color: 'bg-green-600'
+      title: "Employee Marketplace",
+      description:
+        "Employees browse available devices at discounted rates through our secure platform.",
+      color: "bg-green-600",
     },
     {
       step: 3,
-      title: 'Secure Transfer',
-      description: 'Automated data wiping, documentation, and secure handover process with full compliance tracking.',
-      color: 'bg-purple-600'
-    }
-  ]
+      title: "Secure Transfer",
+      description:
+        "Automated data wiping, documentation, and secure handover process with full compliance tracking.",
+      color: "bg-purple-600",
+    },
+  ];
 
-  return (
-    <section id="how-it-works" className={`py-20 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
-            darkMode ? 'text-white' : 'text-gray-900'
-          }`}>
-            Simple 3-Step Process
-          </h2>
-          <p className={`text-xl max-w-3xl mx-auto ${
-            darkMode ? 'text-gray-300' : 'text-gray-600'
-          }`}>
-            Transform your IT equipment management in minutes, not months.
-          </p>
-        </div>
+  const [steps] = useState(defaultSteps);
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Connection Lines */}
-          <div className="hidden md:flex justify-center items-center absolute top-8 left-0 right-0 z-0">
-            <div className="flex-1 max-w-xs">
-              <div className="h-0.5 bg-gradient-to-r from-blue-600 to-green-600"></div>
-            </div>
-            <div className="w-16"></div> {/* Space for middle circle */}
-            <div className="flex-1 max-w-xs">
-              <div className="h-0.5 bg-gradient-to-r from-green-600 to-purple-600"></div>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch section content from database
+        const contentData = await DatabaseService.getSiteContent(
+          "how_it_works"
+        );
+        const content = {};
+        contentData.forEach((item) => {
+          content[item.content_key] = item.content_value;
+        });
+        setSiteContent(content);
+      } catch (error) {
+        console.error("Error fetching how it works content:", error);
+        // Fallback to default content if DB fails
+        setSiteContent({
+          title: "How YouKeepIt Works",
+          description:
+            "Transform your IT equipment lifecycle in three simple steps",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className={`py-20 ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="animate-pulse">
+              <div
+                className={`h-8 ${
+                  darkMode ? "bg-gray-700" : "bg-gray-300"
+                } rounded w-64 mx-auto mb-4`}
+              ></div>
+              <div
+                className={`h-4 ${
+                  darkMode ? "bg-gray-700" : "bg-gray-300"
+                } rounded w-80 mx-auto`}
+              ></div>
             </div>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8 relative z-10">
-            {steps.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className={`w-16 h-16 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 text-white text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}>
-                  {step.step}
-                </div>
-                <h3 className={`text-xl font-semibold mb-4 ${
-                  darkMode ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {step.title}
-                </h3>
-                <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                  {step.description}
-                </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="text-center animate-pulse">
+                <div
+                  className={`w-16 h-16 ${
+                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                  } rounded-full mx-auto mb-6`}
+                ></div>
+                <div
+                  className={`h-6 ${
+                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                  } rounded w-32 mx-auto mb-4`}
+                ></div>
+                <div
+                  className={`h-4 ${
+                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                  } rounded w-48 mx-auto mb-2`}
+                ></div>
+                <div
+                  className={`h-4 ${
+                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                  } rounded w-40 mx-auto`}
+                ></div>
               </div>
             ))}
           </div>
         </div>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      id="how-it-works"
+      className={`py-20 ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2
+            className={`text-3xl md:text-4xl font-bold mb-6 ${
+              darkMode ? "text-white" : "text-gray-900"
+            }`}
+          >
+            {siteContent.title || "How YouKeepIt Works"}
+          </h2>
+          <p
+            className={`text-lg max-w-3xl mx-auto ${
+              darkMode ? "text-gray-300" : "text-gray-600"
+            }`}
+          >
+            {siteContent.description ||
+              "Transform your IT equipment lifecycle in three simple steps"}
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((step, index) => (
+            <div key={step.step} className="text-center relative">
+              {/* Connector Line (hidden on mobile) */}
+              {index < steps.length - 1 && (
+                <div
+                  className={`hidden md:block absolute top-8 left-1/2 w-full h-0.5 transform translate-x-8 ${
+                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                  }`}
+                  style={{ zIndex: 0 }}
+                ></div>
+              )}
+
+              {/* Step Circle */}
+              <div className="relative z-10 mb-6">
+                <div
+                  className={`w-16 h-16 ${step.color} rounded-full mx-auto flex items-center justify-center text-white text-xl font-bold shadow-lg`}
+                >
+                  {step.step}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="relative z-10">
+                <h3
+                  className={`text-xl font-semibold mb-4 ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  className={`leading-relaxed ${
+                    darkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Call to Action */}
         <div className="text-center mt-16">
-          <p className={`text-lg mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <p
+            className={`text-lg mb-6 ${
+              darkMode ? "text-gray-300" : "text-gray-600"
+            }`}
+          >
             Ready to streamline your IT equipment management?
           </p>
-          <button 
+          <button
             onClick={() => {
-              const element = document.getElementById('pricing')
+              const element = document.getElementById("pricing");
               if (element) {
-                element.scrollIntoView({ behavior: 'smooth' })
+                element.scrollIntoView({ behavior: "smooth" });
               }
             }}
             className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
@@ -90,7 +204,7 @@ const HowItWorks = ({ darkMode }) => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HowItWorks
+export default HowItWorks;
