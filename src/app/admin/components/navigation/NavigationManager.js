@@ -50,12 +50,17 @@ export default function NavigationManager({ showMessage }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-gray-900">Navigation Management</h2>
-        <div className="space-x-2">
+      {/* Header with improved spacing and alignment */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-3xl font-bold text-gray-900">
+          Navigation Management
+        </h2>
+
+        {/* Button group with proper spacing */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-2">
           <button
             onClick={addItem}
-            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
             <Plus size={16} />
             Add Item
@@ -63,19 +68,22 @@ export default function NavigationManager({ showMessage }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
           >
             <Save size={16} />
-            {saving ? "Saving..." : "Save Changes"}
+            {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>
 
-      <NavigationList
-        items={localItems}
-        onUpdateItem={updateItem}
-        onRemoveItem={removeItem}
-      />
+      {/* Navigation list with improved spacing */}
+      <div className="mt-6">
+        <NavigationList
+          items={localItems}
+          onUpdateItem={updateItem}
+          onRemoveItem={removeItem}
+        />
+      </div>
     </div>
   );
 }

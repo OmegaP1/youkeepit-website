@@ -33,6 +33,7 @@ export default function PricingManager({ showMessage }) {
     if (success) {
       showMessage("success", "Pricing plan updated successfully!");
       setEditingPlan(null);
+      setShowAddForm(false);
       return true;
     } else {
       showMessage("error", "Failed to update pricing plan");
