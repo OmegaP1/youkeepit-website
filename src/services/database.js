@@ -9,41 +9,49 @@ export class DatabaseService {
       let query = supabase
         .from('site_content')
         .select('*')
-        .eq('is_active', true)
+        .eq('is_active', true);
 
       if (sectionName) {
-        query = query.eq('section_name', sectionName)
+        query = query.eq('section_name', sectionName);
       }
 
-      const { data, error } = await query.order('section_name', { ascending: true })
-      
-      if (error) throw error
-      return data
+      const { data, error } = await query.order('section_name', {
+        ascending: true,
+      });
+
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching site content:', error)
-      return []
+      console.error('Error fetching site content:', error);
+      return [];
     }
   }
 
-  static async updateSiteContent(sectionName, contentKey, contentValue, contentType = 'text') {
+  static async updateSiteContent(
+    sectionName,
+    contentKey,
+    contentValue,
+    contentType = 'text'
+  ) {
     try {
-      const { data, error } = await supabase
-        .from('site_content')
-        .upsert({
+      const { data, error } = await supabase.from('site_content').upsert(
+        {
           section_name: sectionName,
           content_key: contentKey,
           content_value: contentValue,
           content_type: contentType,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'section_name,content_key'
-        })
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: 'section_name,content_key',
+        }
+      );
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error updating site content:', error)
-      throw error
+      console.error('Error updating site content:', error);
+      throw error;
     }
   }
 
@@ -54,13 +62,13 @@ export class DatabaseService {
         .from('features')
         .select('*')
         .eq('is_active', true)
-        .order('order_index', { ascending: true })
+        .order('order_index', { ascending: true });
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching features:', error)
-      return []
+      console.error('Error fetching features:', error);
+      return [];
     }
   }
 
@@ -69,13 +77,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('features')
         .insert([feature])
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error creating feature:', error)
-      throw error
+      console.error('Error creating feature:', error);
+      throw error;
     }
   }
 
@@ -85,13 +93,13 @@ export class DatabaseService {
         .from('features')
         .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error updating feature:', error)
-      throw error
+      console.error('Error updating feature:', error);
+      throw error;
     }
   }
 
@@ -100,13 +108,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('features')
         .update({ is_active: false })
-        .eq('id', id)
+        .eq('id', id);
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error deleting feature:', error)
-      throw error
+      console.error('Error deleting feature:', error);
+      throw error;
     }
   }
 
@@ -117,13 +125,13 @@ export class DatabaseService {
         .from('testimonials')
         .select('*')
         .eq('is_active', true)
-        .order('order_index', { ascending: true })
+        .order('order_index', { ascending: true });
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching testimonials:', error)
-      return []
+      console.error('Error fetching testimonials:', error);
+      return [];
     }
   }
 
@@ -132,13 +140,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('testimonials')
         .insert([testimonial])
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error creating testimonial:', error)
-      throw error
+      console.error('Error creating testimonial:', error);
+      throw error;
     }
   }
 
@@ -148,13 +156,13 @@ export class DatabaseService {
         .from('testimonials')
         .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error updating testimonial:', error)
-      throw error
+      console.error('Error updating testimonial:', error);
+      throw error;
     }
   }
 
@@ -163,13 +171,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('testimonials')
         .update({ is_active: false })
-        .eq('id', id)
+        .eq('id', id);
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error deleting testimonial:', error)
-      throw error
+      console.error('Error deleting testimonial:', error);
+      throw error;
     }
   }
 
@@ -180,13 +188,13 @@ export class DatabaseService {
         .from('pricing_plans')
         .select('*')
         .eq('is_active', true)
-        .order('order_index', { ascending: true })
+        .order('order_index', { ascending: true });
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching pricing plans:', error)
-      return []
+      console.error('Error fetching pricing plans:', error);
+      return [];
     }
   }
 
@@ -195,13 +203,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('pricing_plans')
         .insert([plan])
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error creating pricing plan:', error)
-      throw error
+      console.error('Error creating pricing plan:', error);
+      throw error;
     }
   }
 
@@ -211,13 +219,13 @@ export class DatabaseService {
         .from('pricing_plans')
         .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error updating pricing plan:', error)
-      throw error
+      console.error('Error updating pricing plan:', error);
+      throw error;
     }
   }
 
@@ -226,13 +234,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('pricing_plans')
         .update({ is_active: false })
-        .eq('id', id)
+        .eq('id', id);
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error deleting pricing plan:', error)
-      throw error
+      console.error('Error deleting pricing plan:', error);
+      throw error;
     }
   }
 
@@ -243,13 +251,13 @@ export class DatabaseService {
         .from('faq_items')
         .select('*')
         .eq('is_active', true)
-        .order('order_index', { ascending: true })
+        .order('order_index', { ascending: true });
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching FAQ items:', error)
-      return []
+      console.error('Error fetching FAQ items:', error);
+      return [];
     }
   }
 
@@ -258,13 +266,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('faq_items')
         .insert([faq])
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error creating FAQ item:', error)
-      throw error
+      console.error('Error creating FAQ item:', error);
+      throw error;
     }
   }
 
@@ -274,13 +282,13 @@ export class DatabaseService {
         .from('faq_items')
         .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .select()
+        .select();
 
-      if (error) throw error
-      return data[0]
+      if (error) throw error;
+      return data[0];
     } catch (error) {
-      console.error('Error updating FAQ item:', error)
-      throw error
+      console.error('Error updating FAQ item:', error);
+      throw error;
     }
   }
 
@@ -289,13 +297,13 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('faq_items')
         .update({ is_active: false })
-        .eq('id', id)
+        .eq('id', id);
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error deleting FAQ item:', error)
-      throw error
+      console.error('Error deleting FAQ item:', error);
+      throw error;
     }
   }
 
@@ -306,35 +314,40 @@ export class DatabaseService {
         .from('navigation_items')
         .select('*')
         .eq('is_active', true)
-        .order('order_index', { ascending: true })
+        .order('order_index', { ascending: true });
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching navigation items:', error)
-      return []
+      console.error('Error fetching navigation items:', error);
+      return [];
     }
   }
 
   static async updateNavigationItems(items) {
     try {
       // Delete all existing items and insert new ones
-      await supabase.from('navigation_items').update({ is_active: false }).eq('is_active', true)
+      await supabase
+        .from('navigation_items')
+        .update({ is_active: false })
+        .eq('is_active', true);
 
       const { data, error } = await supabase
         .from('navigation_items')
-        .insert(items.map((item, index) => ({
-          ...item,
-          order_index: index,
-          is_active: true
-        })))
-        .select()
+        .insert(
+          items.map((item, index) => ({
+            ...item,
+            order_index: index,
+            is_active: true,
+          }))
+        )
+        .select();
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error updating navigation items:', error)
-      throw error
+      console.error('Error updating navigation items:', error);
+      throw error;
     }
   }
 
@@ -345,35 +358,228 @@ export class DatabaseService {
         .from('company_stats')
         .select('*')
         .eq('is_active', true)
-        .order('order_index', { ascending: true })
+        .order('order_index', { ascending: true });
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error fetching company stats:', error)
-      return []
+      console.error('Error fetching company stats:', error);
+      return [];
     }
   }
 
   static async updateCompanyStats(stats) {
     try {
       // Delete all existing stats and insert new ones
-      await supabase.from('company_stats').update({ is_active: false }).eq('is_active', true)
+      await supabase
+        .from('company_stats')
+        .update({ is_active: false })
+        .eq('is_active', true);
 
       const { data, error } = await supabase
         .from('company_stats')
-        .insert(stats.map((stat, index) => ({
-          ...stat,
-          order_index: index,
-          is_active: true
-        })))
-        .select()
+        .insert(
+          stats.map((stat, index) => ({
+            ...stat,
+            order_index: index,
+            is_active: true,
+          }))
+        )
+        .select();
 
-      if (error) throw error
-      return data
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error('Error updating company stats:', error)
-      throw error
+      console.error('Error updating company stats:', error);
+      throw error;
+    }
+  }
+  
+  static async getProblemStats() {
+    try {
+      const { data, error } = await supabase
+        .from('problem_stats')
+        .select('*')
+        .eq('is_active', true)
+        .order('order_index', { ascending: true });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error fetching problem stats:', error);
+      return [];
+    }
+  }
+
+  static async createProblemStat(problemStat) {
+    try {
+      const { data, error } = await supabase
+        .from('problem_stats')
+        .insert([problemStat])
+        .select();
+
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('Error creating problem stat:', error);
+      throw error;
+    }
+  }
+
+  static async updateProblemStat(id, updates) {
+    try {
+      const { data, error } = await supabase
+        .from('problem_stats')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .select();
+
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('Error updating problem stat:', error);
+      throw error;
+    }
+  }
+
+  static async deleteProblemStat(id) {
+    try {
+      const { data, error } = await supabase
+        .from('problem_stats')
+        .update({ is_active: false })
+        .eq('id', id);
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error deleting problem stat:', error);
+      throw error;
+    }
+  }
+
+  // How It Works Steps Management
+  static async getHowItWorksSteps() {
+    try {
+      const { data, error } = await supabase
+        .from('howitworks_steps')
+        .select('*')
+        .eq('is_active', true)
+        .order('order_index', { ascending: true });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error fetching howitworks steps:', error);
+      return [];
+    }
+  }
+
+  static async createHowItWorksStep(step) {
+    try {
+      const { data, error } = await supabase
+        .from('howitworks_steps')
+        .insert([step])
+        .select();
+
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('Error creating howitworks step:', error);
+      throw error;
+    }
+  }
+
+  static async updateHowItWorksStep(id, updates) {
+    try {
+      const { data, error } = await supabase
+        .from('howitworks_steps')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .select();
+
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('Error updating howitworks step:', error);
+      throw error;
+    }
+  }
+
+  static async deleteHowItWorksStep(id) {
+    try {
+      const { data, error } = await supabase
+        .from('howitworks_steps')
+        .update({ is_active: false })
+        .eq('id', id);
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error deleting howitworks step:', error);
+      throw error;
+    }
+  }
+
+  // Benefits Management
+  static async getBenefits() {
+    try {
+      const { data, error } = await supabase
+        .from('benefits')
+        .select('*')
+        .eq('is_active', true)
+        .order('order_index', { ascending: true });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error fetching benefits:', error);
+      return [];
+    }
+  }
+
+  static async createBenefit(benefit) {
+    try {
+      const { data, error } = await supabase
+        .from('benefits')
+        .insert([benefit])
+        .select();
+
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('Error creating benefit:', error);
+      throw error;
+    }
+  }
+
+  static async updateBenefit(id, updates) {
+    try {
+      const { data, error } = await supabase
+        .from('benefits')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .select();
+
+      if (error) throw error;
+      return data[0];
+    } catch (error) {
+      console.error('Error updating benefit:', error);
+      throw error;
+    }
+  }
+
+  static async deleteBenefit(id) {
+    try {
+      const { data, error } = await supabase
+        .from('benefits')
+        .update({ is_active: false })
+        .eq('id', id);
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error deleting benefit:', error);
+      throw error;
     }
   }
 
@@ -381,14 +587,14 @@ export class DatabaseService {
   static async migrateExistingData() {
     try {
       // Import existing constants
-      const { 
-        FEATURES_LIST, 
-        TESTIMONIALS, 
-        PRICING_PLANS, 
-        FAQ_ITEMS, 
-        NAVIGATION_ITEMS, 
-        COMPANY_STATS 
-      } = await import('@/utils/constants')
+      const {
+        FEATURES_LIST,
+        TESTIMONIALS,
+        PRICING_PLANS,
+        FAQ_ITEMS,
+        NAVIGATION_ITEMS,
+        COMPANY_STATS,
+      } = await import('@/utils/constants');
 
       // Migrate features
       for (const [index, feature] of FEATURES_LIST.entries()) {
@@ -396,8 +602,8 @@ export class DatabaseService {
           title: feature.title,
           description: feature.description,
           icon: feature.icon,
-          order_index: index
-        })
+          order_index: index,
+        });
       }
 
       // Migrate testimonials
@@ -407,8 +613,8 @@ export class DatabaseService {
           role: testimonial.role,
           content: testimonial.content,
           rating: testimonial.rating,
-          order_index: index
-        })
+          order_index: index,
+        });
       }
 
       // Migrate pricing plans
@@ -420,8 +626,8 @@ export class DatabaseService {
           description: plan.description,
           features: plan.features,
           is_popular: plan.popular,
-          order_index: index
-        })
+          order_index: index,
+        });
       }
 
       // Migrate FAQ items
@@ -429,14 +635,14 @@ export class DatabaseService {
         await this.createFAQItem({
           question: faq.question,
           answer: faq.answer,
-          order_index: index
-        })
+          order_index: index,
+        });
       }
 
-      console.log('Data migration completed successfully')
+      console.log('Data migration completed successfully');
     } catch (error) {
-      console.error('Error migrating data:', error)
-      throw error
+      console.error('Error migrating data:', error);
+      throw error;
     }
   }
 }

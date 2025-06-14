@@ -12,6 +12,9 @@ import PricingManager from '@/app/admin/components/pricing/PricingManager';
 import FAQManager from '@/app/admin/components/faq/FAQManager';
 import NavigationManager from '@/app/admin/components/navigation/NavigationManager';
 import StatsManager from '@/app/admin/components/stats/StatsManager';
+import ProblemManager from '@/app/admin/components/problem/ProblemManager';
+import HowItWorksManager from '@/app/admin/components/howitworks/HowItWorksManager';
+import BenefitsManager from '@/app/admin/components/benefits/BenefitsManager';
 import { useMessage } from '@/hooks/useMessage';
 
 export default function AdminDashboard({ onLogout }) {
@@ -45,6 +48,12 @@ export default function AdminDashboard({ onLogout }) {
         return <NavigationManager showMessage={showMessage} />;
       case 'stats':
         return <StatsManager showMessage={showMessage} />;
+      case 'problem':
+        return <ProblemManager showMessage={showMessage} />;
+      case 'howitworks':
+        return <HowItWorksManager showMessage={showMessage} />;
+      case 'benefits':
+        return <BenefitsManager showMessage={showMessage} />;
       default:
         return <SiteContentManager showMessage={showMessage} />;
     }

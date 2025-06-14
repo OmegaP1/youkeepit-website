@@ -9,16 +9,22 @@ import {
   HelpCircle,
   Navigation,
   BarChart3,
-} from "lucide-react";
+  AlertTriangle,
+  Settings,
+  Award,
+} from 'lucide-react';
 
 const tabs = [
-  { id: "content", label: "Site Content", icon: FileText },
-  { id: "features", label: "Features", icon: Star },
-  { id: "testimonials", label: "Testimonials", icon: Users },
-  { id: "pricing", label: "Pricing", icon: DollarSign },
-  { id: "faq", label: "FAQ", icon: HelpCircle },
-  { id: "navigation", label: "Navigation", icon: Navigation },
-  { id: "stats", label: "Stats", icon: BarChart3 },
+  { id: 'content', label: 'Site Content', icon: FileText },
+  { id: 'features', label: 'Features', icon: Star },
+  { id: 'testimonials', label: 'Testimonials', icon: Users },
+  { id: 'pricing', label: 'Pricing', icon: DollarSign },
+  { id: 'faq', label: 'FAQ', icon: HelpCircle },
+  { id: 'navigation', label: 'Navigation', icon: Navigation },
+  { id: 'stats', label: 'Stats', icon: BarChart3 },
+  { id: 'problem', label: 'Problem Section', icon: AlertTriangle },
+  { id: 'howitworks', label: 'How It Works', icon: Settings },
+  { id: 'benefits', label: 'Benefits', icon: Award },
 ];
 
 export default function AdminSidebar({ activeTab, onTabChange }) {
