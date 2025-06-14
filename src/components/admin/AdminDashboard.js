@@ -40,7 +40,7 @@ export default function AdminDashboard({ onLogout }) {
   // Fetch all data on component mount
   useEffect(() => {
     fetchAllData();
-  }, []);
+  }, [fetchAllData]);
 
   const fetchAllData = async () => {
     setLoading(true);
