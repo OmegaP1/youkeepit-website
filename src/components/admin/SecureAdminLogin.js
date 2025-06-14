@@ -15,22 +15,20 @@ const SecureAdminLogin = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  // Rate limiting - block after 5 failed attempts
   const maxAttempts = 5;
   const isBlocked = attempts >= maxAttempts;
 
   const handleInputChange = (field, value) => {
     setCredentials(prev => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
-    // Clear error when user starts typing
     if (error) setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    
+
     if (isBlocked) {
       setError('Too many failed attempts. Please wait before trying again.');
       return;
@@ -41,31 +39,26 @@ const SecureAdminLogin = ({ onLogin }) => {
 
     try {
       const result = await AuthService.authenticateAdmin(
-        credentials.username.trim(),
+        credentials.username,
         credentials.password
       );
 
       if (result.success) {
-        // Save authentication data
-        AuthStore.saveAuth(
-          result.sessionToken,
-          result.user,
-          result.expiresAt
-        );
-
-        // Reset attempts on successful login
         setAttempts(0);
-        
+
+        // Save user data to localStorage
+        AuthStore.saveAuth(result.user, result.expiresAt);
+
         // Call parent login handler
         onLogin(true, result.user);
       } else {
         setAttempts(prev => prev + 1);
         setError(result.message || 'Invalid credentials');
-        
+
         // Clear password field on failed attempt
         setCredentials(prev => ({
           ...prev,
-          password: ''
+          password: '',
         }));
       }
     } catch (error) {
@@ -139,7 +132,7 @@ const SecureAdminLogin = ({ onLogin }) => {
               <input
                 type="text"
                 value={credentials.username}
-                onChange={(e) => handleInputChange('username', e.target.value)}
+                onChange={e => handleInputChange('username', e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                 placeholder="Enter your username"
                 required
@@ -157,9 +150,9 @@ const SecureAdminLogin = ({ onLogin }) => {
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 value={credentials.password}
-                onChange={(e) => handleInputChange('password', e.target.value)}
+                onChange={e => handleInputChange('password', e.target.value)}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                 placeholder="Enter your password"
                 required
@@ -172,7 +165,11 @@ const SecureAdminLogin = ({ onLogin }) => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors disabled:cursor-not-allowed"
                 disabled={loading || isBlocked}
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
@@ -187,7 +184,12 @@ const SecureAdminLogin = ({ onLogin }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading || isBlocked || !credentials.username || !credentials.password}
+            disabled={
+              loading ||
+              isBlocked ||
+              !credentials.username ||
+              !credentials.password
+            }
             className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-700"
           >
             {loading ? (
@@ -206,24 +208,15 @@ const SecureAdminLogin = ({ onLogin }) => {
           <div className="flex items-start">
             <Shield className="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-xs text-blue-700 font-medium mb-1">Security Notice</p>
+              <p className="text-xs text-blue-700 font-medium mb-1">
+                Security Notice
+              </p>
               <p className="text-xs text-blue-600">
-                This portal uses enterprise-grade encryption and session management. 
-                All access attempts are logged and monitored.
+                This portal uses enterprise-grade encryption and session
+                management. All access attempts are logged and monitored.
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Demo Credentials (Remove in production) */}
-        <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-          <p className="text-xs text-gray-600 font-medium mb-1">Demo Credentials:</p>
-          <p className="text-xs text-gray-500">
-            Username: <code className="bg-gray-200 px-1 rounded">Danilo</code> or <code className="bg-gray-200 px-1 rounded">Joao</code>
-          </p>
-          <p className="text-xs text-gray-500">
-            Password: <code className="bg-gray-200 px-1 rounded">StrongPassword123!</code>
-          </p>
         </div>
       </div>
     </div>
