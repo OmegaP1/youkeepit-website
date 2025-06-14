@@ -1,5 +1,5 @@
-/ src/app/admin/components/ui/LoadingScreen.js
-"use client";
+// src/app/admin/components/ui/LoadingScreen.js
+'use client';
 
 export default function LoadingScreen() {
   return (
