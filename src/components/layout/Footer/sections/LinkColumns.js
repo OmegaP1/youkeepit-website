@@ -4,7 +4,7 @@
 import React from 'react'
 import LinkColumn from '../components/LinkColumn'
 
-const LinkColumns = () => {
+const LinkColumns = ({ darkMode }) => {
   const footerLinks = {
     product: {
       title: 'Product',
@@ -14,8 +14,8 @@ const LinkColumns = () => {
         { label: 'Pricing', href: '#pricing' },
         { label: 'Security', href: '/security', badge: 'SOC 2' },
         { label: 'Integrations', href: '/integrations' },
-        { label: 'API Docs', href: '/api-docs' }
-      ]
+        { label: 'API Docs', href: '/api-docs' },
+      ],
     },
     company: {
       title: 'Company',
@@ -25,8 +25,8 @@ const LinkColumns = () => {
         { label: 'Careers', href: '/careers', badge: 'Hiring' },
         { label: 'Blog', href: '/blog' },
         { label: 'Press Kit', href: '/press' },
-        { label: 'Contact', href: '/contact' }
-      ]
+        { label: 'Contact', href: '/contact' },
+      ],
     },
     support: {
       title: 'Support',
@@ -36,23 +36,24 @@ const LinkColumns = () => {
         { label: 'Documentation', href: '/docs' },
         { label: 'Community', href: '/community' },
         { label: 'Status Page', href: '/status' },
-        { label: 'Submit Ticket', href: '/support' }
-      ]
-    }
-  }
+        { label: 'Submit Ticket', href: '/support' },
+      ],
+    },
+  };
 
   return (
     <div className="grid md:grid-cols-3 gap-8">
       {Object.entries(footerLinks).map(([key, section]) => (
-        <LinkColumn 
-          key={key} 
+        <LinkColumn
+          key={key}
           title={section.title}
           icon={section.icon}
           links={section.links}
+          darkMode={darkMode}
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
 export default LinkColumns

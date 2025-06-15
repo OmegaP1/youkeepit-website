@@ -3,59 +3,123 @@
 
 import React from 'react'
 
-const SocialIcon = ({ social }) => {
-  const getIcon = (iconName) => {
-    switch (iconName) {
+const SocialIcon = ({ social, darkMode }) => {
+  const getIcon = iconType => {
+    const iconClass = `w-6 h-6 transition-all duration-300 ${
+      darkMode ? 'drop-shadow-sm' : ''
+    }`;
+
+    switch (iconType) {
       case 'twitter':
         return (
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg className={iconClass} fill="currentColor" viewBox="0 0 20 20">
             <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
           </svg>
-        )
+        );
       case 'linkedin':
         return (
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clipRule="evenodd" />
+          <svg className={iconClass} fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"
+              clipRule="evenodd"
+            />
           </svg>
-        )
+        );
       case 'github':
         return (
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clipRule="evenodd" />
+          <svg className={iconClass} fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z"
+              clipRule="evenodd"
+            />
           </svg>
-        )
+        );
       case 'youtube':
         return (
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 0C15.523 0 20 4.477 20 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0zm3.738 6.608c-.235-.893-.927-1.596-1.738-1.774C11.252 4.667 10 4.667 10 4.667s-1.252 0-2 .167c-.811.178-1.503.881-1.738 1.774C6.095 7.347 6.095 10 6.095 10s0 2.653.167 3.392c.235.893.927 1.596 1.738 1.774.748.167 2 .167 2 .167s1.252 0 2-.167c.811-.178 1.503-.881 1.738-1.774.167-.739.167-3.392.167-3.392s0-2.653-.167-3.392zM8.667 12.5V7.5l2.667 2.5-2.667 2.5z" clipRule="evenodd" />
+          <svg className={iconClass} fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M20 10c0-.738-.167-1.44-.453-2.079C19.211 6.424 17.576 5.5 15.334 5.5H4.666C2.424 5.5.789 6.424.453 7.921.167 8.56 0 9.262 0 10s.167 1.44.453 2.079C.789 13.576 2.424 14.5 4.666 14.5h10.668c2.242 0 3.877-.924 4.213-2.421.286-.639.453-1.341.453-2.079zm-6-2.5L8 10l6 2.5V7.5z"
+              clipRule="evenodd"
+            />
           </svg>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <a
       href={social.href}
-      className={`group flex flex-col items-center p-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 ${social.color} hover:scale-105 hover:shadow-lg`}
+      className={`group relative flex flex-col items-center p-3 rounded-xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 overflow-hidden ${
+        darkMode
+          ? 'border-white/10 bg-white/5 hover:shadow-lg hover:shadow-white/5'
+          : 'border-gray-200 bg-white/50 hover:shadow-lg hover:shadow-gray-200/50'
+      } ${social.color}`}
       aria-label={`Follow us on ${social.name}`}
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className="flex items-center justify-center w-8 h-8 mb-2">
-        {getIcon(social.icon)}
+      {/* Background Glow Effect */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div
+          className={`absolute inset-0 rounded-xl ${
+            social.name === 'Twitter'
+              ? darkMode
+                ? 'bg-blue-500/10'
+                : 'bg-blue-100/50'
+              : social.name === 'LinkedIn'
+                ? darkMode
+                  ? 'bg-blue-600/10'
+                  : 'bg-blue-200/50'
+                : social.name === 'GitHub'
+                  ? darkMode
+                    ? 'bg-gray-500/10'
+                    : 'bg-gray-100/50'
+                  : darkMode
+                    ? 'bg-red-500/10'
+                    : 'bg-red-100/50'
+          }`}
+        ></div>
       </div>
-      <div className="text-center">
-        <div className="text-xs font-medium text-white group-hover:text-current transition-colors">
-          {social.name}
+
+      <div className="relative z-10 flex flex-col items-center">
+        <div className="flex items-center justify-center w-8 h-8 mb-2">
+          {getIcon(social.icon)}
         </div>
-        <div className="text-xs text-gray-400 group-hover:text-current/70 transition-colors">
-          {social.followers}
+        <div className="text-center">
+          <div
+            className={`text-xs font-medium transition-colors duration-300 ${
+              darkMode
+                ? 'text-white group-hover:text-current'
+                : 'text-gray-900 group-hover:text-current'
+            }`}
+          >
+            {social.name}
+          </div>
+          <div
+            className={`text-xs transition-colors duration-300 ${
+              darkMode
+                ? 'text-gray-400 group-hover:text-current/70'
+                : 'text-gray-600 group-hover:text-current/70'
+            }`}
+          >
+            {social.followers}
+          </div>
         </div>
+
+        {/* Night Mode Sparkle Effect */}
+        {darkMode && (
+          <div className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+          </div>
+        )}
       </div>
     </a>
-  )
-}
+  );
+};
 
 export default SocialIcon

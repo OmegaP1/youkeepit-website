@@ -3,13 +3,15 @@
 
 import React from 'react'
 
-const LinkColumn = ({ title, icon, links }) => {
+const LinkColumn = ({ title, icon, links, darkMode }) => {
   return (
     <div className="space-y-6">
       {/* Column Header */}
       <div className="flex items-center space-x-2">
         <span className="text-xl">{icon}</span>
-        <h4 className="text-white font-semibold text-lg">{title}</h4>
+        <h4 className={`font-semibold text-lg transition-colors duration-300 ${
+          darkMode ? 'text-white' : 'text-gray-900'
+        }`}>{title}</h4>
       </div>
       
       {/* Links List */}
@@ -18,17 +20,35 @@ const LinkColumn = ({ title, icon, links }) => {
           <li key={index}>
             <a 
               href={link.href} 
-              className="group flex items-center justify-between text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1"
+              className={`group flex items-center justify-between transition-all duration-300 hover:translate-x-1 ${
+                darkMode 
+                  ? 'text-gray-400 hover:text-white' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
             >
-              <span className="group-hover:text-blue-300">
+              <span className={`transition-colors duration-300 ${
+                darkMode ? 'group-hover:text-blue-300' : 'group-hover:text-blue-600'
+              }`}>
                 {link.label}
               </span>
+              
               {link.badge && (
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                  link.badge === 'New' ? 'bg-green-500/20 text-green-300' :
-                  link.badge === 'SOC 2' ? 'bg-blue-500/20 text-blue-300' :
-                  link.badge === 'Hiring' ? 'bg-purple-500/20 text-purple-300' :
-                  'bg-gray-500/20 text-gray-300'
+                <span className={`text-xs px-2 py-1 rounded-full font-medium transition-all duration-300 ${
+                  link.badge === 'New' 
+                    ? darkMode 
+                      ? 'bg-green-500/20 text-green-300 group-hover:bg-green-500/30' 
+                      : 'bg-green-100 text-green-600 group-hover:bg-green-200'
+                    : link.badge === 'SOC 2' 
+                      ? darkMode 
+                        ? 'bg-blue-500/20 text-blue-300 group-hover:bg-blue-500/30' 
+                        : 'bg-blue-100 text-blue-600 group-hover:bg-blue-200'
+                      : link.badge === 'Hiring' 
+                        ? darkMode 
+                          ? 'bg-purple-500/20 text-purple-300 group-hover:bg-purple-500/30' 
+                          : 'bg-purple-100 text-purple-600 group-hover:bg-purple-200'
+                        : darkMode 
+                          ? 'bg-gray-500/20 text-gray-300 group-hover:bg-gray-500/30' 
+                          : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
                 }`}>
                   {link.badge}
                 </span>
@@ -47,6 +67,11 @@ const LinkColumn = ({ title, icon, links }) => {
           </li>
         ))}
       </ul>
+      
+      {/* Night Mode Glow Effect */}
+      {darkMode && (
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-lg"></div>
+      )}
     </div>
   )
 }
