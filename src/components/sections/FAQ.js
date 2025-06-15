@@ -1,14 +1,15 @@
 // src/components/sections/FAQ.js
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { DatabaseService } from "@/services/database";
+import React, { useState, useEffect } from 'react';
+import { DatabaseService } from '@/services/database';
+import { CodeMatrix } from '@/components/backgrounds';
 
 const FAQ = ({ darkMode }) => {
   const [faqItems, setFaqItems] = useState([]);
   const [siteContent, setSiteContent] = useState({});
   const [loading, setLoading] = useState(true);
-  const [openItems, setOpenItems] = useState({});
+  const [openItems, setOpenItems] = useState(new Set());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,19 +21,50 @@ const FAQ = ({ darkMode }) => {
         setFaqItems(faqData);
 
         // Fetch section content from database
-        const contentData = await DatabaseService.getSiteContent("faq");
+        const contentData = await DatabaseService.getSiteContent('faq');
         const content = {};
-        contentData.forEach((item) => {
+        contentData.forEach(item => {
           content[item.content_key] = item.content_value;
         });
         setSiteContent(content);
       } catch (error) {
-        console.error("Error fetching FAQ data:", error);
-        // Fallback to empty data if DB fails
-        setFaqItems([]);
+        console.error('Error fetching FAQ data:', error);
+        // Fallback to default data if DB fails
+        setFaqItems([
+          {
+            question: 'How secure is the data wiping process?',
+            answer:
+              'We use DOD 5220.22-M certified data destruction methods with multiple overwrite passes. All processes are documented and compliance certificates are provided.',
+          },
+          {
+            question: 'What happens if an employee damages a device?',
+            answer:
+              'Our platform includes condition assessment tools and pricing adjustments. Employees are informed of any damage costs before purchase, ensuring transparency.',
+          },
+          {
+            question: 'How quickly can we get started?',
+            answer:
+              'Most organizations are up and running within 24-48 hours. Our onboarding team handles the initial setup and integration with your existing systems.',
+          },
+          {
+            question: 'Do you integrate with our HRIS system?',
+            answer:
+              'Yes, we integrate with popular HRIS platforms including Workday, BambooHR, ADP, and others through APIs and automated data sync.',
+          },
+          {
+            question: 'What if we have compliance requirements?',
+            answer:
+              'YouKeepIt is SOC 2 Type II certified and complies with GDPR, HIPAA, and other industry standards. We provide all necessary documentation for audits.',
+          },
+          {
+            question: 'Can we integrate with our existing IT systems?',
+            answer:
+              'Absolutely. We integrate with popular HRIS, asset management, and IT service management platforms through APIs and custom integrations.',
+          },
+        ]);
         setSiteContent({
-          title: "Frequently Asked Questions",
-          description: "Get answers to common questions about YouKeepIt",
+          title: 'Frequently Asked Questions',
+          description: 'Get answers to common questions about YouKeepIt',
         });
       } finally {
         setLoading(false);
@@ -42,28 +74,36 @@ const FAQ = ({ darkMode }) => {
     fetchData();
   }, []);
 
-  const toggleItem = (itemId) => {
-    setOpenItems((prev) => ({
-      ...prev,
-      [itemId]: !prev[itemId],
-    }));
+  const toggleItem = index => {
+    const newOpenItems = new Set(openItems);
+    if (newOpenItems.has(index)) {
+      newOpenItems.delete(index);
+    } else {
+      newOpenItems.add(index);
+    }
+    setOpenItems(newOpenItems);
   };
 
   if (loading) {
     return (
-      <section className={`py-20 ${darkMode ? "bg-gray-800" : "bg-white"}`}>
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+      <section
+        className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
+      >
+        {/* Background Pattern */}
+        <CodeMatrix darkMode={darkMode} />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="animate-pulse">
               <div
                 className={`h-8 ${
-                  darkMode ? "bg-gray-700" : "bg-gray-300"
-                } rounded w-96 mx-auto mb-4`}
+                  darkMode ? 'bg-gray-700' : 'bg-gray-300'
+                } rounded w-64 mx-auto mb-4`}
               ></div>
               <div
                 className={`h-4 ${
-                  darkMode ? "bg-gray-700" : "bg-gray-300"
-                } rounded w-80 mx-auto`}
+                  darkMode ? 'bg-gray-700' : 'bg-gray-300'
+                } rounded w-96 mx-auto`}
               ></div>
             </div>
           </div>
@@ -71,25 +111,25 @@ const FAQ = ({ darkMode }) => {
             {[...Array(6)].map((_, index) => (
               <div
                 key={index}
-                className={`border rounded-xl p-6 animate-pulse ${
+                className={`p-6 rounded-2xl border animate-pulse ${
                   darkMode
-                    ? "border-gray-600 bg-gray-700"
-                    : "border-gray-200 bg-gray-50"
+                    ? 'bg-gray-700 border-gray-600'
+                    : 'bg-gray-50 border-gray-200'
                 }`}
               >
                 <div
                   className={`h-6 ${
-                    darkMode ? "bg-gray-600" : "bg-gray-300"
+                    darkMode ? 'bg-gray-600' : 'bg-gray-300'
                   } rounded mb-4 w-3/4`}
                 ></div>
                 <div
                   className={`h-4 ${
-                    darkMode ? "bg-gray-600" : "bg-gray-300"
+                    darkMode ? 'bg-gray-600' : 'bg-gray-300'
                   } rounded mb-2`}
                 ></div>
                 <div
                   className={`h-4 ${
-                    darkMode ? "bg-gray-600" : "bg-gray-300"
+                    darkMode ? 'bg-gray-600' : 'bg-gray-300'
                   } rounded w-5/6`}
                 ></div>
               </div>
@@ -103,86 +143,94 @@ const FAQ = ({ darkMode }) => {
   return (
     <section
       id="faq"
-      className={`py-20 ${darkMode ? "bg-gray-800" : "bg-white"}`}
+      className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
     >
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+      {/* Background Pattern */}
+      <CodeMatrix darkMode={darkMode} />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2
             className={`text-3xl md:text-4xl font-bold mb-6 ${
-              darkMode ? "text-white" : "text-gray-900"
+              darkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
-            {siteContent.title || "Frequently Asked Questions"}
+            {siteContent.title || 'Frequently Asked Questions'}
           </h2>
           <p
             className={`text-lg max-w-3xl mx-auto ${
-              darkMode ? "text-gray-300" : "text-gray-600"
+              darkMode ? 'text-gray-300' : 'text-gray-600'
             }`}
           >
             {siteContent.description ||
-              "Get answers to common questions about YouKeepIt"}
+              'Get answers to common questions about YouKeepIt'}
           </p>
         </div>
 
         <div className="space-y-4">
-          {faqItems.map((item) => (
+          {faqItems.map((item, index) => (
             <div
-              key={item.id}
-              className={`border rounded-xl transition-all duration-200 ${
+              key={item.id || index}
+              className={`rounded-2xl border transition-all duration-300 hover:shadow-lg ${
                 darkMode
-                  ? "border-gray-600 bg-gray-700 hover:bg-gray-650"
-                  : "border-gray-200 bg-gray-50 hover:bg-white hover:shadow-md"
+                  ? 'bg-gray-700/80 border-gray-600 hover:bg-gray-700'
+                  : 'bg-gray-50/80 border-gray-200 hover:bg-white'
               }`}
             >
               <button
-                className="w-full p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-xl"
-                onClick={() => toggleItem(item.id)}
+                onClick={() => toggleItem(index)}
+                className={`w-full px-6 py-6 text-left flex items-center justify-between transition-colors duration-200 ${
+                  openItems.has(index)
+                    ? darkMode
+                      ? 'text-blue-400'
+                      : 'text-blue-600'
+                    : darkMode
+                      ? 'text-white hover:text-blue-400'
+                      : 'text-gray-900 hover:text-blue-600'
+                }`}
               >
-                <div className="flex justify-between items-start">
-                  <h3
-                    className={`text-lg font-semibold pr-8 ${
-                      darkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    {item.question}
-                  </h3>
-                  <div
-                    className={`flex-shrink-0 transition-transform duration-200 ${
-                      openItems[item.id] ? "transform rotate-180" : ""
-                    }`}
-                  >
-                    <svg
-                      className={`w-5 h-5 ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                <span className="font-semibold text-lg pr-4">
+                  {item.question}
+                </span>
+                <svg
+                  className={`w-6 h-6 transform transition-transform duration-200 flex-shrink-0 ${
+                    openItems.has(index) ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
               </button>
 
-              {openItems[item.id] && (
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  openItems.has(index)
+                    ? 'max-h-96 opacity-100'
+                    : 'max-h-0 opacity-0'
+                }`}
+              >
                 <div className="px-6 pb-6">
                   <div
-                    className={`text-base leading-relaxed border-t pt-4 ${
-                      darkMode
-                        ? "text-gray-300 border-gray-600"
-                        : "text-gray-600 border-gray-200"
+                    className={`w-full h-px mb-4 ${
+                      darkMode ? 'bg-gray-600' : 'bg-gray-200'
+                    }`}
+                  ></div>
+                  <p
+                    className={`leading-relaxed ${
+                      darkMode ? 'text-gray-300' : 'text-gray-600'
                     }`}
                   >
                     {item.answer}
-                  </div>
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
@@ -191,14 +239,31 @@ const FAQ = ({ darkMode }) => {
         <div className="text-center mt-16">
           <p
             className={`text-lg mb-6 ${
-              darkMode ? "text-gray-300" : "text-gray-600"
+              darkMode ? 'text-gray-300' : 'text-gray-600'
             }`}
           >
-            Still have questions? We're here to help.
+            Still have questions? We're here to help!
           </p>
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
-            Contact Support
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+              Contact Support
+            </button>
+            <button
+              onClick={() => {
+                const element = document.getElementById('pricing');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className={`px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
+                darkMode
+                  ? 'bg-gray-700 text-white hover:bg-gray-600 border border-gray-600'
+                  : 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-300'
+              }`}
+            >
+              View Pricing
+            </button>
+          </div>
         </div>
       </div>
     </section>

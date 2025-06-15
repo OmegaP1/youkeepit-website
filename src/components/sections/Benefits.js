@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { DatabaseService } from "@/services/database";
+import { ParticleField } from '@/components/backgrounds';
 
 const Benefits = ({ darkMode }) => {
   const [benefits, setBenefits] = useState([]);
@@ -66,6 +67,7 @@ const Benefits = ({ darkMode }) => {
           title: 'Why Choose YouKeepIt?',
           description:
             'Discover the advantages that make us the preferred choice for IT equipment management',
+          cta_text: 'Explore Features',
         });
       } finally {
         setLoading(false);
@@ -75,102 +77,36 @@ const Benefits = ({ darkMode }) => {
     fetchData();
   }, []);
 
-  // Function to get icon based on benefit title
+  // Helper function to get appropriate icon based on benefit title
   const getIcon = title => {
-    switch (title.toLowerCase()) {
-      case 'cost reduction':
-        return (
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        );
-      case 'quick setup':
-        return (
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
-        );
-      case 'employee satisfaction':
-        return (
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        );
-      case 'compliance ready':
-        return (
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-            />
-          </svg>
-        );
-      default:
-        return (
-          <svg
-            className="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        );
-    }
+    const iconMap = {
+      'Cost Reduction': '💰',
+      'Quick Setup': '⚡',
+      'Employee Satisfaction': '😊',
+      'Compliance Ready': '🔒',
+      'Enterprise Security': '🛡️',
+      'Automated Workflows': '⚙️',
+      'Analytics Dashboard': '📊',
+      'Integration Ready': '🔗',
+    };
+    return iconMap[title] || '✨';
   };
 
   if (loading) {
     return (
-      <section className={`py-20 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section
+        className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}
+      >
+        {/* Background Pattern */}
+        <ParticleField darkMode={darkMode} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="animate-pulse">
               <div
                 className={`h-8 ${
                   darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                } rounded w-80 mx-auto mb-4`}
+                } rounded w-64 mx-auto mb-4`}
               ></div>
               <div
                 className={`h-4 ${
@@ -183,24 +119,24 @@ const Benefits = ({ darkMode }) => {
             {[...Array(4)].map((_, index) => (
               <div
                 key={index}
-                className={`p-8 rounded-2xl text-center animate-pulse border ${
+                className={`p-6 rounded-2xl text-center animate-pulse border ${
                   darkMode
                     ? 'bg-gray-700 border-gray-600'
                     : 'bg-white border-gray-200'
                 }`}
               >
                 <div
-                  className={`w-16 h-16 rounded-full ${
+                  className={`h-16 w-16 ${
                     darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                  } mx-auto mb-6`}
+                  } rounded-full mx-auto mb-4`}
                 ></div>
                 <div
-                  className={`h-12 ${
+                  className={`h-8 ${
                     darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                  } rounded w-16 mx-auto mb-4`}
+                  } rounded mb-2 w-16 mx-auto`}
                 ></div>
                 <div
-                  className={`h-6 ${
+                  className={`h-4 ${
                     darkMode ? 'bg-gray-600' : 'bg-gray-300'
                   } rounded mb-4 w-24 mx-auto`}
                 ></div>
@@ -230,9 +166,12 @@ const Benefits = ({ darkMode }) => {
   return (
     <section
       id="benefits"
-      className={`py-20 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
+      className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Background Pattern */}
+      <ParticleField darkMode={darkMode} />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2
             className={`text-3xl md:text-4xl font-bold mb-6 ${
@@ -255,16 +194,16 @@ const Benefits = ({ darkMode }) => {
           {benefits.map((benefit, index) => (
             <div
               key={benefit.id || index}
-              className={`p-8 rounded-2xl text-center transition-all duration-300 hover:transform hover:-translate-y-2 border shadow-lg hover:shadow-xl ${
+              className={`p-6 rounded-2xl text-center transition-all duration-300 hover:transform hover:-translate-y-2 border shadow-lg hover:shadow-xl group ${
                 darkMode
-                  ? 'bg-gray-700 border-gray-600 hover:bg-gray-650'
-                  : 'bg-white border-gray-200 hover:shadow-2xl'
+                  ? 'bg-gray-700/80 border-gray-600 hover:bg-gray-700'
+                  : 'bg-white/90 border-gray-200 hover:shadow-2xl'
               }`}
             >
               {/* Icon */}
               <div className="mb-6">
                 <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto ${
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl transition-all duration-300 group-hover:scale-110 ${
                     benefit.color?.includes('blue')
                       ? darkMode
                         ? 'bg-blue-900/30 border-2 border-blue-500/30'
@@ -330,6 +269,12 @@ const Benefits = ({ darkMode }) => {
         {/* CTA Section */}
         <div className="text-center mt-16">
           <button
+            onClick={() => {
+              const element = document.getElementById('features');
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105 ${
               darkMode
                 ? 'bg-blue-600 hover:bg-blue-700 text-white'
