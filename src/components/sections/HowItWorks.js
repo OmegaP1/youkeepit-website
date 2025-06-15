@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { DatabaseService } from "@/services/database";
+import { WavePattern } from '@/components/backgrounds';
 
 const HowItWorks = ({ darkMode }) => {
   const [steps, setSteps] = useState([]);
@@ -56,6 +57,7 @@ const HowItWorks = ({ darkMode }) => {
           title: 'How It Works',
           description:
             'Transform your IT equipment lifecycle in three simple steps',
+          cta_text: 'Get Started Today',
         });
       } finally {
         setLoading(false);
@@ -67,8 +69,13 @@ const HowItWorks = ({ darkMode }) => {
 
   if (loading) {
     return (
-      <section className={`py-20 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section
+        className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
+      >
+        {/* Background Pattern */}
+        <WavePattern darkMode={darkMode} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="animate-pulse">
               <div
@@ -122,9 +129,12 @@ const HowItWorks = ({ darkMode }) => {
   return (
     <section
       id="how-it-works"
-      className={`py-20 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
+      className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Background Pattern */}
+      <WavePattern darkMode={darkMode} />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2
             className={`text-3xl md:text-4xl font-bold mb-6 ${
@@ -186,6 +196,12 @@ const HowItWorks = ({ darkMode }) => {
         {/* CTA Section */}
         <div className="text-center mt-16">
           <button
+            onClick={() => {
+              const element = document.getElementById('benefits');
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105 ${
               darkMode
                 ? 'bg-blue-600 hover:bg-blue-700 text-white'

@@ -1,8 +1,9 @@
 // src/components/sections/Pricing.js
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { DatabaseService } from "@/services/database";
+import React, { useState, useEffect } from 'react';
+import { DatabaseService } from '@/services/database';
+import { GeometricPattern } from '@/components/backgrounds';
 
 const Pricing = ({ darkMode }) => {
   const [pricingPlans, setPricingPlans] = useState([]);
@@ -19,20 +20,67 @@ const Pricing = ({ darkMode }) => {
         setPricingPlans(plansData);
 
         // Fetch section content from database
-        const contentData = await DatabaseService.getSiteContent("pricing");
+        const contentData = await DatabaseService.getSiteContent('pricing');
         const content = {};
-        contentData.forEach((item) => {
+        contentData.forEach(item => {
           content[item.content_key] = item.content_value;
         });
         setSiteContent(content);
       } catch (error) {
-        console.error("Error fetching pricing data:", error);
-        // Fallback to empty data if DB fails
-        setPricingPlans([]);
+        console.error('Error fetching pricing data:', error);
+        // Fallback to default data if DB fails
+        setPricingPlans([
+          {
+            name: 'Starter',
+            price: '$49',
+            period: '/month',
+            description: 'Perfect for small teams getting started',
+            features: [
+              'Up to 50 devices',
+              'Basic employee portal',
+              'Email support',
+              'Standard data wiping',
+              'Basic analytics',
+            ],
+            is_popular: false,
+          },
+          {
+            name: 'Professional',
+            price: '$149',
+            period: '/month',
+            description: 'Ideal for growing organizations',
+            features: [
+              'Up to 200 devices',
+              'Advanced employee portal',
+              'Priority support',
+              'Certified data destruction',
+              'Advanced analytics',
+              'API integrations',
+              'Custom branding',
+            ],
+            is_popular: true,
+          },
+          {
+            name: 'Enterprise',
+            price: 'Custom',
+            period: '',
+            description: 'Tailored for large organizations',
+            features: [
+              'Unlimited devices',
+              'White-label solution',
+              'Dedicated support',
+              'Enterprise integrations',
+              'Custom workflows',
+              'Advanced security',
+              'SLA guarantees',
+            ],
+            is_popular: false,
+          },
+        ]);
         setSiteContent({
-          title: "Simple, Transparent Pricing",
+          title: 'Simple, Transparent Pricing',
           description:
-            "Choose the plan that fits your organization size and needs",
+            'Choose the plan that fits your organization size and needs',
         });
       } finally {
         setLoading(false);
@@ -44,18 +92,23 @@ const Pricing = ({ darkMode }) => {
 
   if (loading) {
     return (
-      <section className={`py-20 ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section
+        className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}
+      >
+        {/* Background Pattern */}
+        <GeometricPattern darkMode={darkMode} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="animate-pulse">
               <div
                 className={`h-8 ${
-                  darkMode ? "bg-gray-700" : "bg-gray-300"
-                } rounded w-80 mx-auto mb-4`}
+                  darkMode ? 'bg-gray-700' : 'bg-gray-300'
+                } rounded w-64 mx-auto mb-4`}
               ></div>
               <div
                 className={`h-4 ${
-                  darkMode ? "bg-gray-700" : "bg-gray-300"
+                  darkMode ? 'bg-gray-700' : 'bg-gray-300'
                 } rounded w-96 mx-auto`}
               ></div>
             </div>
@@ -64,45 +117,40 @@ const Pricing = ({ darkMode }) => {
             {[...Array(3)].map((_, index) => (
               <div
                 key={index}
-                className={`p-8 rounded-2xl border relative animate-pulse ${
+                className={`p-8 rounded-2xl border animate-pulse ${
                   darkMode
-                    ? "bg-gray-800 border-gray-700"
-                    : "bg-white border-gray-200"
+                    ? 'bg-gray-800 border-gray-700'
+                    : 'bg-white border-gray-200'
                 }`}
               >
                 <div
                   className={`h-6 ${
-                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
                   } rounded mb-4 w-20`}
                 ></div>
                 <div
                   className={`h-10 ${
-                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
                   } rounded mb-2 w-32`}
                 ></div>
                 <div
                   className={`h-4 ${
-                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
                   } rounded mb-6 w-24`}
                 ></div>
-                <div
-                  className={`h-4 ${
-                    darkMode ? "bg-gray-700" : "bg-gray-300"
-                  } rounded mb-2`}
-                ></div>
                 <div className="space-y-3 mb-8">
-                  {[...Array(4)].map((_, i) => (
+                  {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
                       className={`h-4 ${
-                        darkMode ? "bg-gray-700" : "bg-gray-300"
+                        darkMode ? 'bg-gray-700' : 'bg-gray-300'
                       } rounded`}
                     ></div>
                   ))}
                 </div>
                 <div
                   className={`h-12 ${
-                    darkMode ? "bg-gray-700" : "bg-gray-300"
+                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
                   } rounded`}
                 ></div>
               </div>
@@ -116,39 +164,42 @@ const Pricing = ({ darkMode }) => {
   return (
     <section
       id="pricing"
-      className={`py-20 ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}
+      className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Background Pattern */}
+      <GeometricPattern darkMode={darkMode} />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2
             className={`text-3xl md:text-4xl font-bold mb-6 ${
-              darkMode ? "text-white" : "text-gray-900"
+              darkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
-            {siteContent.title || "Simple, Transparent Pricing"}
+            {siteContent.title || 'Simple, Transparent Pricing'}
           </h2>
           <p
             className={`text-lg max-w-3xl mx-auto ${
-              darkMode ? "text-gray-300" : "text-gray-600"
+              darkMode ? 'text-gray-300' : 'text-gray-600'
             }`}
           >
             {siteContent.description ||
-              "Choose the plan that fits your organization size and needs"}
+              'Choose the plan that fits your organization size and needs'}
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {pricingPlans.map((plan) => (
+          {pricingPlans.map((plan, index) => (
             <div
-              key={plan.id}
+              key={plan.id || index}
               className={`p-8 rounded-2xl border relative transition-all duration-200 hover:transform hover:-translate-y-1 ${
                 plan.is_popular
                   ? darkMode
-                    ? "bg-gradient-to-br from-blue-900 to-purple-900 border-blue-500 shadow-2xl shadow-blue-500/20"
-                    : "bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200 shadow-2xl shadow-blue-200/20"
+                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/50 border-blue-500 shadow-2xl shadow-blue-500/20'
+                    : 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200 shadow-2xl shadow-blue-200/20'
                   : darkMode
-                  ? "bg-gray-800 hover:bg-gray-750 border-gray-700"
-                  : "bg-white hover:shadow-lg border-gray-200"
+                    ? 'bg-gray-800/80 hover:bg-gray-800 border-gray-700'
+                    : 'bg-white/90 hover:shadow-lg border-gray-200'
               }`}
             >
               {plan.is_popular && (
@@ -162,7 +213,7 @@ const Pricing = ({ darkMode }) => {
               <div className="text-center">
                 <h3
                   className={`text-xl font-semibold mb-2 ${
-                    darkMode ? "text-white" : "text-gray-900"
+                    darkMode ? 'text-white' : 'text-gray-900'
                   }`}
                 >
                   {plan.name}
@@ -170,7 +221,7 @@ const Pricing = ({ darkMode }) => {
                 <div className="mb-1">
                   <span
                     className={`text-4xl font-bold ${
-                      darkMode ? "text-white" : "text-gray-900"
+                      darkMode ? 'text-white' : 'text-gray-900'
                     }`}
                   >
                     {plan.price}
@@ -178,7 +229,7 @@ const Pricing = ({ darkMode }) => {
                   {plan.period && (
                     <span
                       className={`text-lg ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
+                        darkMode ? 'text-gray-400' : 'text-gray-500'
                       }`}
                     >
                       {plan.period}
@@ -187,7 +238,7 @@ const Pricing = ({ darkMode }) => {
                 </div>
                 <p
                   className={`mb-6 ${
-                    darkMode ? "text-gray-400" : "text-gray-600"
+                    darkMode ? 'text-gray-400' : 'text-gray-600'
                   }`}
                 >
                   {plan.description}
@@ -210,7 +261,7 @@ const Pricing = ({ darkMode }) => {
                     </svg>
                     <span
                       className={`${
-                        darkMode ? "text-gray-300" : "text-gray-600"
+                        darkMode ? 'text-gray-300' : 'text-gray-600'
                       }`}
                     >
                       {feature}
@@ -222,13 +273,13 @@ const Pricing = ({ darkMode }) => {
               <button
                 className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
                   plan.is_popular
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg"
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg'
                     : darkMode
-                    ? "bg-gray-700 text-white hover:bg-gray-600 border border-gray-600"
-                    : "bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-300"
+                      ? 'bg-gray-700 text-white hover:bg-gray-600 border border-gray-600'
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-300'
                 }`}
               >
-                {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
+                {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
               </button>
             </div>
           ))}
@@ -238,7 +289,7 @@ const Pricing = ({ darkMode }) => {
         <div className="text-center mt-16">
           <p
             className={`text-lg mb-6 ${
-              darkMode ? "text-gray-300" : "text-gray-600"
+              darkMode ? 'text-gray-300' : 'text-gray-600'
             }`}
           >
             Need a custom solution? Contact our sales team for enterprise
@@ -246,15 +297,15 @@ const Pricing = ({ darkMode }) => {
           </p>
           <button
             onClick={() => {
-              const element = document.getElementById("faq");
+              const element = document.getElementById('faq');
               if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
+                element.scrollIntoView({ behavior: 'smooth' });
               }
             }}
             className={`px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
               darkMode
-                ? "bg-gray-700 text-white hover:bg-gray-600 border border-gray-600"
-                : "bg-white text-gray-900 hover:bg-gray-50 border border-gray-300"
+                ? 'bg-gray-700 text-white hover:bg-gray-600 border border-gray-600'
+                : 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-300'
             }`}
           >
             View FAQ
