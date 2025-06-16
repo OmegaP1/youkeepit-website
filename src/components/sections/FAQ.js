@@ -54,7 +54,7 @@ const FAQ = ({ darkMode }) => {
           {
             question: 'What if we have compliance requirements?',
             answer:
-              'YouKeepIt is SOC 2 Type II certified and complies with GDPR, HIPAA, and other industry standards. We provide all necessary documentation for audits.',
+              'KeepMyKit is SOC 2 Type II certified and complies with GDPR, HIPAA, and other industry standards. We provide all necessary documentation for audits.',
           },
           {
             question: 'Can we integrate with our existing IT systems?',
@@ -64,7 +64,7 @@ const FAQ = ({ darkMode }) => {
         ]);
         setSiteContent({
           title: 'Frequently Asked Questions',
-          description: 'Get answers to common questions about YouKeepIt',
+          description: 'Get answers to common questions about KeepMyKit',
         });
       } finally {
         setLoading(false);
@@ -163,7 +163,7 @@ const FAQ = ({ darkMode }) => {
             }`}
           >
             {siteContent.description ||
-              'Get answers to common questions about YouKeepIt'}
+              'Get answers to common questions about KeepMyKit'}
           </p>
         </div>
 

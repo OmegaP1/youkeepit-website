@@ -126,41 +126,41 @@ const Testimonials = ({ darkMode }) => {
   return (
     <section
       id="testimonials"
-      className={`py-20 ${darkMode ? "bg-gray-800" : "bg-white"}`}
+      className={`py-20 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2
             className={`text-3xl md:text-4xl font-bold mb-6 ${
-              darkMode ? "text-white" : "text-gray-900"
+              darkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
-            {siteContent.title || "Trusted by Leading Companies"}
+            {siteContent.title || 'Trusted by Leading Companies'}
           </h2>
           <p
             className={`text-lg max-w-3xl mx-auto ${
-              darkMode ? "text-gray-300" : "text-gray-600"
+              darkMode ? 'text-gray-300' : 'text-gray-600'
             }`}
           >
             {siteContent.description ||
-              "See what our customers are saying about their experience"}
+              'See what our customers are saying about their experience'}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
+          {testimonials.map(testimonial => (
             <div
               key={testimonial.id}
               className={`p-8 rounded-2xl border transition-all duration-200 hover:transform hover:-translate-y-1 ${
                 darkMode
-                  ? "bg-gray-700 hover:bg-gray-650 border-gray-600"
-                  : "bg-gray-50 hover:bg-white hover:shadow-lg border-gray-200"
+                  ? 'bg-gray-700 hover:bg-gray-650 border-gray-600'
+                  : 'bg-gray-50 hover:bg-white hover:shadow-lg border-gray-200'
               }`}
             >
               <div className="flex mb-4">{renderStars(testimonial.rating)}</div>
               <p
                 className={`mb-6 text-lg leading-relaxed ${
-                  darkMode ? "text-gray-300" : "text-gray-600"
+                  darkMode ? 'text-gray-300' : 'text-gray-600'
                 }`}
               >
                 "{testimonial.content}"
@@ -168,14 +168,14 @@ const Testimonials = ({ darkMode }) => {
               <div>
                 <div
                   className={`font-semibold text-lg ${
-                    darkMode ? "text-white" : "text-gray-900"
+                    darkMode ? 'text-white' : 'text-gray-900'
                   }`}
                 >
                   {testimonial.name}
                 </div>
                 <div
                   className={`text-sm ${
-                    darkMode ? "text-gray-400" : "text-gray-500"
+                    darkMode ? 'text-gray-400' : 'text-gray-500'
                   }`}
                 >
                   {testimonial.role}
@@ -190,16 +190,16 @@ const Testimonials = ({ darkMode }) => {
         <div className="text-center mt-16">
           <p
             className={`text-lg mb-6 ${
-              darkMode ? "text-gray-300" : "text-gray-600"
+              darkMode ? 'text-gray-300' : 'text-gray-600'
             }`}
           >
-            Join hundreds of companies already using YouKeepIt
+            Join hundreds of companies already using KeepMyKit
           </p>
           <button
             onClick={() => {
-              const element = document.getElementById("pricing");
+              const element = document.getElementById('pricing');
               if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
+                element.scrollIntoView({ behavior: 'smooth' });
               }
             }}
             className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg"

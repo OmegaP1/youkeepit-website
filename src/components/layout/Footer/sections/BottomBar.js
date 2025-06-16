@@ -25,7 +25,7 @@ const BottomBar = ({ darkMode }) => {
               darkMode ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
-            &copy; 2025 YouKeepIt. All rights reserved.
+            &copy; 2025 KeepMyKit. All rights reserved.
           </p>
 
           {/* Security Badge */}

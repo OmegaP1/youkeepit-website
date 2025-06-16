@@ -47,7 +47,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
             <span
               className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}
             >
-              YouKeepIt
+              KeepMyKit
             </span>
           </div>
 

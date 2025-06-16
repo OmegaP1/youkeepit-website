@@ -64,7 +64,7 @@ const Benefits = ({ darkMode }) => {
           },
         ]);
         setSiteContent({
-          title: 'Why Choose YouKeepIt?',
+          title: 'Why Choose KeepMyKit?',
           description:
             'Discover the advantages that make us the preferred choice for IT equipment management',
           cta_text: 'Explore Features',
@@ -178,7 +178,7 @@ const Benefits = ({ darkMode }) => {
               darkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
-            {siteContent.title || 'Why Choose YouKeepIt?'}
+            {siteContent.title || 'Why Choose KeepMyKit?'}
           </h2>
           <p
             className={`text-lg max-w-3xl mx-auto ${

@@ -8,7 +8,7 @@ const SocialSection = ({ darkMode }) => {
   const socialLinks = [
     {
       name: 'Twitter',
-      href: 'https://twitter.com/youkeepit',
+      href: 'https://twitter.com/KeepMyKit',
       icon: 'twitter',
       color: darkMode
         ? 'hover:text-blue-400 hover:bg-blue-400/20'
@@ -17,7 +17,7 @@ const SocialSection = ({ darkMode }) => {
     },
     {
       name: 'LinkedIn',
-      href: 'https://linkedin.com/company/youkeepit',
+      href: 'https://linkedin.com/company/KeepMyKit',
       icon: 'linkedin',
       color: darkMode
         ? 'hover:text-blue-600 hover:bg-blue-600/20'
@@ -26,7 +26,7 @@ const SocialSection = ({ darkMode }) => {
     },
     {
       name: 'GitHub',
-      href: 'https://github.com/youkeepit',
+      href: 'https://github.com/KeepMyKit',
       icon: 'github',
       color: darkMode
         ? 'hover:text-gray-300 hover:bg-gray-300/20'
@@ -35,7 +35,7 @@ const SocialSection = ({ darkMode }) => {
     },
     {
       name: 'YouTube',
-      href: 'https://youtube.com/@youkeepit',
+      href: 'https://youtube.com/@KeepMyKit',
       icon: 'youtube',
       color: darkMode
         ? 'hover:text-red-500 hover:bg-red-500/20'

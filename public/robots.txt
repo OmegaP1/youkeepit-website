@@ -9,7 +9,7 @@ Allow: /#testimonials
 Allow: /#faq
 
 # Sitemaps
-Sitemap: https://youkeepit-website.vercel.app/sitemap.xml
+Sitemap: https://KeepMyKit-website.vercel.app/sitemap.xml
 
 # Crawl delay (optional)
 Crawl-delay: 1

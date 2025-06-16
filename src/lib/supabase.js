@@ -20,7 +20,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'youkeepit-admin-app',
+      'X-Client-Info': 'KeepMyKit-admin-app',
     },
   },
 });

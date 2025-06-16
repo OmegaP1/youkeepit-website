@@ -76,9 +76,9 @@ export async function copyToClipboard(text) {
 export function generateMetaTags({
   title,
   description,
-  image = "/og-image.jpg",
-  url = "https://youkeepit-website.vercel.app",
-  type = "website",
+  image = '/og-image.jpg',
+  url = 'https://KeepMyKit-website.vercel.app',
+  type = 'website',
 }) {
   return {
     title,
@@ -91,7 +91,7 @@ export function generateMetaTags({
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
       images: [image],
