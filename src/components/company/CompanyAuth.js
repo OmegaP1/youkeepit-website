@@ -2,56 +2,93 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Building2,
-  Mail,
-  Lock,
-  ArrowRight,
-  AlertCircle,
+  ArrowLeft,
+  Shield,
+  Sparkles,
+  CheckCircle,
   Eye,
   EyeOff,
-  Shield,
-  ArrowLeft,
-  Sparkles,
-  Zap,
+  Lock,
+  Mail,
+  User,
 } from 'lucide-react';
-import Link from 'next/link';
 
 export default function CompanyAuth({ onLogin }) {
   const [formData, setFormData] = useState({
+    companyCode: '',
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setError('');
     setIsLoading(true);
+    setError('');
 
-    const result = await onLogin(formData);
+    try {
+      // Demo authentication logic
+      if (
+        formData.companyCode.toUpperCase() === 'DEMO' &&
+        formData.email === 'admin@company.com' &&
+        formData.password === 'admin123'
+      ) {
+        // Set authentication in localStorage
+        const authData = {
+          isAuthenticated: true,
+          user: {
+            email: formData.email,
+            companyCode: formData.companyCode,
+            role: 'admin',
+          },
+          loginTime: new Date().toISOString(),
+        };
 
-    if (!result.success) {
-      setError(result.error || 'Login failed');
+        localStorage.setItem('companyAuth', JSON.stringify(authData));
+
+        // Call onLogin if provided
+        if (onLogin) {
+          onLogin(authData);
+        }
+
+        // Redirect to company portal
+        router.push('/company');
+      } else {
+        setError(
+          'Invalid credentials. Use DEMO/admin@company.com/admin123 for demo access.'
+        );
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('An error occurred during login. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (error) setError(''); // Clear error when user starts typing
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20 bg-gradient-to-br from-blue-400 to-purple-500 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 bg-gradient-to-br from-purple-400 to-blue-500 animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl opacity-10 bg-gradient-to-br from-green-400 to-blue-500"></div>
+      {/* Background Effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-400/20 to-purple-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-purple-400/20 to-blue-600/20 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
@@ -84,76 +121,73 @@ export default function CompanyAuth({ onLogin }) {
               </p>
             </div>
 
-            {/* Security Badge */}
-            <div className="mb-6 p-4 rounded-2xl border bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-green-100 rounded-xl">
-                  <Shield className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-green-800">
-                    Secure Company Access
-                  </p>
-                  <p className="text-xs text-green-600">
-                    End-to-end encrypted authentication
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Error Alert */}
+            {/* Error Message */}
             {error && (
-              <div className="mb-6 p-4 rounded-2xl border bg-gradient-to-r from-red-50 to-pink-50 border-red-200 animate-shake">
-                <div className="flex items-center space-x-3">
-                  <AlertCircle className="w-5 h-5 text-red-600" />
-                  <span className="text-sm font-medium text-red-800">
-                    {error}
-                  </span>
-                </div>
+              <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-sm">
+                {error}
               </div>
             )}
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
+              {/* Company Code */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  Email Address
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Company Code
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
-                    type="email"
-                    value={formData.email}
-                    onChange={e => handleInputChange('email', e.target.value)}
-                    placeholder="admin@company.com"
+                    type="text"
+                    name="companyCode"
+                    value={formData.companyCode}
+                    onChange={handleInputChange}
+                    placeholder="Enter company code"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80"
                     required
-                    className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
                   />
                 </div>
               </div>
 
-              {/* Password Field */}
+              {/* Email */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="admin@company.com"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
                     type={showPassword ? 'text' : 'password'}
+                    name="password"
                     value={formData.password}
-                    onChange={e =>
-                      handleInputChange('password', e.target.value)
-                    }
+                    onChange={handleInputChange}
                     placeholder="Enter your password"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80"
                     required
-                    className="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -164,68 +198,59 @@ export default function CompanyAuth({ onLogin }) {
                 </div>
               </div>
 
-              {/* Demo Credentials */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Zap className="w-4 h-4 text-blue-600" />
-                  <p className="text-sm font-semibold text-blue-900">
-                    Demo Credentials
-                  </p>
-                </div>
-                <p className="text-sm text-blue-700">
-                  Email: admin@company.com
-                </p>
-                <p className="text-sm text-blue-700">Password: admin123</p>
-              </div>
-
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-2xl font-semibold hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-2xl flex items-center justify-center space-x-3 transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 {isLoading ? (
-                  <>
+                  <div className="flex items-center justify-center space-x-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     <span>Signing in...</span>
-                  </>
+                  </div>
                 ) : (
-                  <>
-                    <span>Sign In to Portal</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </>
+                  'Access Company Portal'
                 )}
               </button>
             </form>
 
-            {/* Footer */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <p className="text-center text-sm text-gray-500">
-                Secure access to KeepMyKit Company Portal
+            {/* Demo Credentials */}
+            <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
+              <div className="flex items-center space-x-2 mb-2">
+                <CheckCircle className="w-4 h-4 text-green-600" />
+                <span className="text-sm font-medium text-green-800">
+                  Demo Credentials
+                </span>
+              </div>
+              <p className="text-xs text-green-600">
+                Company Code: <strong>DEMO</strong>
+                <br />
+                Email: <strong>admin@company.com</strong>
+                <br />
+                Password: <strong>admin123</strong>
               </p>
+            </div>
+
+            {/* Security Badge */}
+            <div className="mt-6 p-4 rounded-2xl border bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-blue-100 rounded-xl">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-blue-800">
+                    Secure Company Access
+                  </p>
+                  <p className="text-xs text-blue-600">
+                    Enterprise-grade security & authentication
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes shake {
-          0%,
-          100% {
-            transform: translateX(0);
-          }
-          25% {
-            transform: translateX(-5px);
-          }
-          75% {
-            transform: translateX(5px);
-          }
-        }
-
-        .animate-shake {
-          animation: shake 0.5s ease-in-out;
-        }
-      `}</style>
     </div>
   );
 }

@@ -1,41 +1,71 @@
 // src/app/company/page.js
 'use client';
 
-import { useCompanyAuth } from '@/hooks/useCompanyAuth';
-import CompanyAuth from '@/components/company/CompanyAuth';
-import CompanyDashboard from '@/components/company/CompanyDashboard';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import CompanyLayout from './components/layout/CompanyLayout';
 import LoadingScreen from './components/ui/LoadingScreen';
-import { useEffect, useState } from 'react';
 
 export default function CompanyPage() {
-  const { isAuthenticated, isLoading, login, logout, isClient } =
-    useCompanyAuth();
   const [mounted, setMounted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
-  }, []);
 
-  // Prevent hydration mismatch by showing loading state during SSR
-  if (!mounted || !isClient) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+    // Check authentication status
+    const checkAuth = () => {
+      if (typeof window !== 'undefined') {
+        const auth = localStorage.getItem('companyAuth');
+        console.log('Company auth check:', auth); // Debug log
+
+        if (auth) {
+          try {
+            const authData = JSON.parse(auth);
+            if (authData && authData.isAuthenticated) {
+              setIsAuthenticated(true);
+            } else {
+              router.push('/login/company');
+            }
+          } catch (error) {
+            console.error('Error parsing auth data:', error);
+            router.push('/login/company');
+          }
+        } else {
+          router.push('/login/company');
+        }
+      }
+      setIsLoading(false);
+    };
+
+    // Small delay to ensure proper mounting
+    const timer = setTimeout(checkAuth, 100);
+    return () => clearTimeout(timer);
+  }, [router]);
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('companyAuth');
+    }
+    setIsAuthenticated(false);
+    router.push('/login/company');
+  };
+
+  // Don't render anything until mounted to prevent hydration issues
+  if (!mounted || isLoading) {
+    return <LoadingScreen message="Loading Company Portal..." />;
   }
 
-  // Show loading screen while checking auth
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
+  // If not authenticated, show loading while redirecting
   if (!isAuthenticated) {
-    return <CompanyAuth onLogin={login} />;
+    return <LoadingScreen message="Redirecting to login..." />;
   }
 
-  return <CompanyDashboard onLogout={logout} />;
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <CompanyLayout onLogout={handleLogout} />
+    </div>
+  );
 }
