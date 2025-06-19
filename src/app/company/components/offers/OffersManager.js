@@ -1,359 +1,360 @@
 // src/app/company/components/offers/OffersManager.js
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Search, Filter, Plus, Download, Eye, Edit, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import {
+  Plus,
+  Search,
+  Filter,
+  Eye,
+  Edit,
+  Copy,
+  Download,
+  Monitor,
+  User,
+  DollarSign,
+  Calendar,
+  AlertCircle,
+  CheckCircle,
+} from 'lucide-react';
 import OfferStatusBadge from '../ui/OfferStatusBadge';
+import CreateOfferWizard from './CreateOfferWizard';
 
 export default function OffersManager({ showMessage }) {
-  const [offers, setOffers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [showCreateWizard, setShowCreateWizard] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('newest');
 
-  useEffect(() => {
-    fetchOffers();
-  }, []);
-
-  const fetchOffers = async () => {
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setOffers([
-        {
-          id: 'OFF-001',
-          employeeName: 'John Smith',
-          employeeEmail: 'john.smith@company.com',
-          deviceName: 'MacBook Pro 13" 2022',
-          serialNumber: 'MP2022001',
-          price: 1200,
-          status: 'completed',
-          createdAt: '2024-06-15T10:30:00Z',
-          updatedAt: '2024-06-16T14:45:00Z',
-          offerUrl: 'https://app.keepmykit.com/offer/abc123'
-        },
-        {
-          id: 'OFF-002',
-          employeeName: 'Sarah Johnson',
-          employeeEmail: 'sarah.johnson@company.com',
-          deviceName: 'iPhone 13 Pro 256GB',
-          serialNumber: 'IP2023002',
-          price: 650,
-          status: 'pending-wipe',
-          createdAt: '2024-06-14T09:15:00Z',
-          updatedAt: '2024-06-14T09:15:00Z',
-          offerUrl: 'https://app.keepmykit.com/offer/def456'
-        },
-        {
-          id: 'OFF-003',
-          employeeName: 'Mike Davis',
-          employeeEmail: 'mike.davis@company.com',
-          deviceName: 'iPad Pro 11" 2023',
-          serialNumber: 'IP2023003',
-          price: 450,
-          status: 'payment-pending',
-          createdAt: '2024-06-14T11:20:00Z',
-          updatedAt: '2024-06-15T16:30:00Z',
-          offerUrl: 'https://app.keepmykit.com/offer/ghi789'
-        },
-        {
-          id: 'OFF-004',
-          employeeName: 'Emily Chen',
-          employeeEmail: 'emily.chen@company.com',
-          deviceName: 'Dell XPS 13 2022',
-          serialNumber: 'DX2022004',
-          price: 800,
-          status: 'pending-employee',
-          createdAt: '2024-06-13T15:45:00Z',
-          updatedAt: '2024-06-13T15:45:00Z',
-          offerUrl: 'https://app.keepmykit.com/offer/jkl012'
-        },
-        {
-          id: 'OFF-005',
-          employeeName: 'Alex Rodriguez',
-          employeeEmail: 'alex.rodriguez@company.com',
-          deviceName: 'Surface Pro 8',
-          serialNumber: 'SP2023005',
-          price: 550,
-          status: 'wipe-confirmed',
-          createdAt: '2024-06-13T08:30:00Z',
-          updatedAt: '2024-06-14T12:15:00Z',
-          offerUrl: 'https://app.keepmykit.com/offer/mno345'
-        }
-      ]);
-    } catch (error) {
-      showMessage('Error loading offers', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Mock offers data
+  const offers = [
+    {
+      id: 'OFF-001',
+      employeeName: 'John Smith',
+      employeeEmail: 'john.smith@company.com',
+      deviceBrand: 'Apple',
+      deviceModel: 'MacBook Pro 16" 2022',
+      serialNumber: 'ABCD1234567890',
+      price: 850,
+      status: 'pending_wipe',
+      createdAt: '2024-06-19T10:30:00Z',
+      expiresAt: '2024-06-26T10:30:00Z',
+      offerLink: 'https://offer.keepmykit.com/off-001',
+      username: 'john_smith_001',
+      password: 'temp_pass_001',
+    },
+    {
+      id: 'OFF-002',
+      employeeName: 'Sarah Johnson',
+      employeeEmail: 'sarah.johnson@company.com',
+      deviceBrand: 'Dell',
+      deviceModel: 'XPS 13 Plus',
+      serialNumber: 'EFGH2345678901',
+      price: 420,
+      status: 'wipe_confirmed',
+      createdAt: '2024-06-19T08:15:00Z',
+      expiresAt: '2024-06-26T08:15:00Z',
+      offerLink: 'https://offer.keepmykit.com/off-002',
+      username: 'sarah_johnson_002',
+      password: 'temp_pass_002',
+    },
+    {
+      id: 'OFF-003',
+      employeeName: 'Mike Wilson',
+      employeeEmail: 'mike.wilson@company.com',
+      deviceBrand: 'Lenovo',
+      deviceModel: 'ThinkPad X1 Carbon Gen 10',
+      serialNumber: 'IJKL3456789012',
+      price: 520,
+      status: 'completed',
+      createdAt: '2024-06-18T14:20:00Z',
+      expiresAt: '2024-06-25T14:20:00Z',
+      offerLink: 'https://offer.keepmykit.com/off-003',
+      username: 'mike_wilson_003',
+      password: 'temp_pass_003',
+    },
+    {
+      id: 'OFF-004',
+      employeeName: 'Emma Davis',
+      employeeEmail: 'emma.davis@company.com',
+      deviceBrand: 'Apple',
+      deviceModel: 'MacBook Air M2',
+      serialNumber: 'MNOP4567890123',
+      price: 680,
+      status: 'pending_acceptance',
+      createdAt: '2024-06-17T16:45:00Z',
+      expiresAt: '2024-06-24T16:45:00Z',
+      offerLink: 'https://offer.keepmykit.com/off-004',
+      username: 'emma_davis_004',
+      password: 'temp_pass_004',
+    },
+  ];
 
   const filteredOffers = offers.filter(offer => {
-    const matchesSearch = offer.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         offer.deviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         offer.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || offer.status === statusFilter;
+    const matchesSearch =
+      offer.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      offer.deviceModel.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      offer.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === 'all' || offer.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const sortedOffers = [...filteredOffers].sort((a, b) => {
-    switch (sortBy) {
-      case 'newest':
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      case 'oldest':
-        return new Date(a.createdAt) - new Date(b.createdAt);
-      case 'price-high':
-        return b.price - a.price;
-      case 'price-low':
-        return a.price - b.price;
-      case 'employee':
-        return a.employeeName.localeCompare(b.employeeName);
-      default:
-        return 0;
-    }
-  });
-
-  const handleViewOffer = (offer) => {
-    window.open(offer.offerUrl, '_blank');
-  };
-
-  const handleEditOffer = (offer) => {
-    showMessage(`Edit offer ${offer.id} functionality coming soon`, 'info');
-  };
-
-  const handleDeleteOffer = (offer) => {
-    if (window.confirm(`Are you sure you want to delete offer ${offer.id}?`)) {
-      setOffers(offers.filter(o => o.id !== offer.id));
-      showMessage(`Offer ${offer.id} deleted successfully`, 'success');
+  const copyToClipboard = (text, type) => {
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      showMessage(`${type} copied to clipboard!`, 'success');
+    } else {
+      showMessage('Clipboard not available', 'error');
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
-  if (loading) {
+  const getStatusIcon = status => {
+    switch (status) {
+      case 'pending_acceptance':
+        return <AlertCircle className="w-4 h-4 text-orange-500" />;
+      case 'pending_wipe':
+        return <AlertCircle className="w-4 h-4 text-blue-500" />;
+      case 'wipe_confirmed':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'completed':
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      default:
+        return <AlertCircle className="w-4 h-4 text-gray-500" />;
+    }
+  };
+
+  if (showCreateWizard) {
     return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
-          <div className="h-10 bg-gray-200 rounded w-32 animate-pulse"></div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded animate-pulse"></div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <CreateOfferWizard
+        onClose={() => setShowCreateWizard(false)}
+        onSuccess={newOffer => {
+          setShowCreateWizard(false);
+          showMessage(`Offer ${newOffer.id} created successfully!`, 'success');
+        }}
+        showMessage={showMessage}
+      />
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Sale Offers</h1>
-          <p className="text-gray-600">Manage device sale offers for employees</p>
+          <h1 className="text-3xl font-bold text-gray-900">Sale Offers</h1>
+          <p className="text-gray-600 mt-1">
+            Create and manage device sale offers for employees.
+          </p>
         </div>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
-          <Plus className="h-4 w-4" />
+        <button
+          onClick={() => setShowCreateWizard(true)}
+          className="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center space-x-2 shadow-md"
+        >
+          <Plus className="w-5 h-5" />
           <span>Create New Offer</span>
         </button>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 md:space-x-4">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search offers..."
+              placeholder="Search offers, employees, or devices..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={e => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
 
+          {/* Status Filter */}
           <div className="flex items-center space-x-4">
-            {/* Status Filter */}
             <div className="flex items-center space-x-2">
-              <Filter className="h-4 w-4 text-gray-400" />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">All Status</option>
-                <option value="draft">Draft</option>
-                <option value="pending-employee">Pending Employee</option>
-                <option value="pending-wipe">Pending Wipe</option>
-                <option value="wipe-confirmed">Wipe Confirmed</option>
-                <option value="payment-pending">Payment Pending</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
+              <Filter className="w-5 h-5 text-gray-400" />
+              <span className="text-sm font-medium text-gray-700">Status:</span>
             </div>
-
-            {/* Sort */}
             <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={statusFilter}
+              onChange={e => setStatusFilter(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="employee">Employee A-Z</option>
+              <option value="all">All Statuses</option>
+              <option value="pending_acceptance">Pending Acceptance</option>
+              <option value="pending_wipe">Pending Wipe</option>
+              <option value="wipe_confirmed">Wipe Confirmed</option>
+              <option value="completed">Completed</option>
             </select>
-
-            {/* Export */}
-            <button className="border border-gray-300 rounded-lg px-3 py-2 flex items-center space-x-2 hover:bg-gray-50 transition-colors">
-              <Download className="h-4 w-4" />
-              <span>Export</span>
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Offers Table */}
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Offer Details
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Employee
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Device
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {sortedOffers.map((offer) => (
-                <tr key={offer.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">{offer.id}</div>
-                      <div className="text-gray-500">SN: {offer.serialNumber}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">{offer.employeeName}</div>
-                      <div className="text-gray-500">{offer.employeeEmail}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{offer.deviceName}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">${offer.price.toLocaleString()}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <OfferStatusBadge status={offer.status} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{formatDate(offer.createdAt)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button
-                        onClick={() => handleViewOffer(offer)}
-                        className="text-blue-600 hover:text-blue-900 p-1 hover:bg-blue-50 rounded"
-                        title="View Offer"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleEditOffer(offer)}
-                        className="text-gray-600 hover:text-gray-900 p-1 hover:bg-gray-50 rounded"
-                        title="Edit Offer"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteOffer(offer)}
-                        className="text-red-600 hover:text-red-900 p-1 hover:bg-red-50 rounded"
-                        title="Delete Offer"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {sortedOffers.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-500">
-              {searchTerm || statusFilter !== 'all' ? 'No offers match your filters' : 'No offers created yet'}
+      {/* Offers Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {filteredOffers.map(offer => (
+          <div
+            key={offer.id}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <span className="font-bold text-lg text-gray-900">
+                  {offer.id}
+                </span>
+                <OfferStatusBadge status={offer.status} />
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => copyToClipboard(offer.offerLink, 'Offer link')}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Copy offer link"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() =>
+                    showMessage(`Viewing offer ${offer.id}`, 'info')
+                  }
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="View details"
+                >
+                  <Eye className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() =>
+                    showMessage(`Editing offer ${offer.id}`, 'info')
+                  }
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Edit offer"
+                >
+                  <Edit className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            {!searchTerm && statusFilter === 'all' && (
-              <button className="mt-2 text-blue-600 hover:text-blue-700 font-medium">
-                Create your first offer
-              </button>
-            )}
+
+            {/* Employee Info */}
+            <div className="mb-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <User className="w-4 h-4 text-gray-400" />
+                <span className="font-medium text-gray-900">
+                  {offer.employeeName}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 pl-6">
+                {offer.employeeEmail}
+              </p>
+            </div>
+
+            {/* Device Info */}
+            <div className="mb-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <Monitor className="w-4 h-4 text-gray-400" />
+                <span className="font-medium text-gray-900">
+                  {offer.deviceBrand} {offer.deviceModel}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 pl-6">
+                Serial: {offer.serialNumber}
+              </p>
+            </div>
+
+            {/* Price */}
+            <div className="mb-4">
+              <div className="flex items-center space-x-2">
+                <DollarSign className="w-4 h-4 text-green-500" />
+                <span className="font-bold text-xl text-green-600">
+                  ${offer.price}
+                </span>
+              </div>
+            </div>
+
+            {/* Login Credentials */}
+            <div className="mb-4 bg-gray-50 rounded-lg p-3">
+              <h4 className="font-medium text-gray-900 mb-2">
+                Employee Access
+              </h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Username:</span>
+                  <div className="flex items-center space-x-2">
+                    <code className="text-sm bg-white px-2 py-1 rounded border">
+                      {offer.username}
+                    </code>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(offer.username, 'Username')
+                      }
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <Copy className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Password:</span>
+                  <div className="flex items-center space-x-2">
+                    <code className="text-sm bg-white px-2 py-1 rounded border">
+                      {offer.password}
+                    </code>
+                    <button
+                      onClick={() =>
+                        copyToClipboard(offer.password, 'Password')
+                      }
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <Copy className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4" />
+                <span>Created: {formatDate(offer.createdAt)}</span>
+              </div>
+              <span>Expires: {formatDate(offer.expiresAt)}</span>
+            </div>
           </div>
-        )}
+        ))}
       </div>
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-2xl font-bold text-gray-900">{offers.length}</div>
-          <div className="text-sm text-gray-600">Total Offers</div>
+      {/* Empty State */}
+      {filteredOffers.length === 0 && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+          <Monitor className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-xl font-medium text-gray-900 mb-2">
+            No offers found
+          </h3>
+          <p className="text-gray-600 mb-6">
+            {searchTerm || statusFilter !== 'all'
+              ? 'Try adjusting your search or filters.'
+              : 'Create your first device sale offer to get started.'}
+          </p>
+          {!searchTerm && statusFilter === 'all' && (
+            <button
+              onClick={() => setShowCreateWizard(true)}
+              className="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+            >
+              Create First Offer
+            </button>
+          )}
         </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-2xl font-bold text-green-600">
-            {offers.filter(o => o.status === 'completed').length}
-          </div>
-          <div className="text-sm text-gray-600">Completed</div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-2xl font-bold text-orange-600">
-            {offers.filter(o => ['pending-wipe', 'wipe-confirmed', 'payment-pending'].includes(o.status)).length}
-          </div>
-          <div className="text-sm text-gray-600">In Progress</div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-2xl font-bold text-gray-900">
-            ${offers.reduce((sum, o) => sum + o.price, 0).toLocaleString()}
-          </div>
-          <div className="text-sm text-gray-600">Total Value</div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

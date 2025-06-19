@@ -17,9 +17,9 @@ const CompanySection = ({ darkMode }) => {
             darkMode ? 'text-gray-300' : 'text-gray-600'
           }`}
         >
-          Transforming IT equipment transitions for modern companies through
-          secure, sustainable, and employee-focused solutions that recover
-          60-80% of device value.
+          Transforming IT equipment transitions for companies through secure,
+          sustainable, and employee-focused solutions that recover 60-80% of
+          device value.
         </p>
 
         {/* Trust Badge */}

@@ -2,79 +2,165 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, User, Laptop, DollarSign, Send } from 'lucide-react';
+import {
+  X,
+  ArrowLeft,
+  ArrowRight,
+  User,
+  Monitor,
+  DollarSign,
+  Eye,
+  Copy,
+  CheckCircle,
+  AlertTriangle,
+} from 'lucide-react';
 
-export default function CreateOfferWizard({ showMessage, onComplete }) {
+export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    // Employee Information
+    // Employee Info
     employeeName: '',
     employeeEmail: '',
-    employeeDepartment: '',
-    employeeId: '',
-    
-    // Device Information
-    deviceType: '',
+
+    // Device Info
     deviceBrand: '',
     deviceModel: '',
     serialNumber: '',
-    condition: '',
-    purchaseDate: '',
-    
+    condition: 'good',
+
     // Pricing
-    originalPrice: '',
-    suggestedPrice: '',
-    finalPrice: '',
-    priceReason: '',
-    
-    // Offer Settings
-    offerExpiry: '',
-    includeAccessories: false,
-    notes: ''
+    price: '',
+    notes: '',
   });
 
+  const [generatedOffer, setGeneratedOffer] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const deviceBrands = [
+    'Apple',
+    'Dell',
+    'HP',
+    'Lenovo',
+    'ASUS',
+    'Acer',
+    'MSI',
+    'Microsoft',
+    'Other',
+  ];
+
+  const deviceConditions = [
+    {
+      value: 'excellent',
+      label: 'Excellent',
+      description: 'Like new, minimal wear',
+    },
+    {
+      value: 'good',
+      label: 'Good',
+      description: 'Minor wear, fully functional',
+    },
+    {
+      value: 'fair',
+      label: 'Fair',
+      description: 'Visible wear, all features work',
+    },
+    {
+      value: 'poor',
+      label: 'Poor',
+      description: 'Heavy wear, may have issues',
+    },
+  ];
+
   const steps = [
-    { id: 1, title: 'Employee Info', icon: User },
-    { id: 2, title: 'Device Details', icon: Laptop },
-    { id: 3, title: 'Pricing', icon: DollarSign },
-    { id: 4, title: 'Review & Send', icon: Send }
+    { id: 1, title: 'Employee', description: 'Employee Information' },
+    { id: 2, title: 'Device', description: 'Device Details' },
+    { id: 3, title: 'Pricing', description: 'Set Price & Terms' },
+    { id: 4, title: 'Review', description: 'Review & Create' },
   ];
 
   const updateFormData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const nextStep = () => {
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
+  const generateOfferCredentials = () => {
+    const randomId = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, '0');
+    const sanitizedName = formData.employeeName
+      .toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-z0-9_]/g, '');
 
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    return {
+      id: `OFF-${randomId}`,
+      username: `${sanitizedName}_${randomId}`,
+      password: `temp_pass_${randomId}`,
+      offerLink: `https://offer.keepmykit.com/off-${randomId}`,
+    };
   };
 
   const handleSubmit = async () => {
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      showMessage('Offer created successfully and sent to employee!', 'success');
-      onComplete();
-    } catch (error) {
-      showMessage('Failed to create offer. Please try again.', 'error');
+    setIsSubmitting(true);
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const credentials = generateOfferCredentials();
+    const newOffer = {
+      ...credentials,
+      ...formData,
+      status: 'pending_acceptance',
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+    };
+
+    setGeneratedOffer(newOffer);
+    setIsSubmitting(false);
+    setCurrentStep(5); // Move to success step
+  };
+
+  const copyToClipboard = (text, type) => {
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      showMessage(`${type} copied to clipboard!`, 'success');
+    } else {
+      showMessage('Clipboard not available', 'error');
     }
   };
+
+  const validateStep = step => {
+    switch (step) {
+      case 1:
+        return formData.employeeName && formData.employeeEmail;
+      case 2:
+        return formData.deviceBrand && formData.deviceModel;
+      case 3:
+        return formData.price && parseFloat(formData.price) > 0;
+      default:
+        return true;
+    }
+  };
+
+  const canProceed = validateStep(currentStep);
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray-900">Employee Information</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="text-center mb-8">
+              <div className="bg-blue-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <User className="w-8 h-8 text-blue-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Employee Information
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Enter the employee details for this device sale offer.
+              </p>
+            </div>
+
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Employee Name *
@@ -82,363 +168,539 @@ export default function CreateOfferWizard({ showMessage, onComplete }) {
                 <input
                   type="text"
                   value={formData.employeeName}
-                  onChange={(e) => updateFormData('employeeName', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="EMP001"
+                  onChange={e => updateFormData('employeeName', e.target.value)}
+                  placeholder="Enter employee's full name"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Employee Email *
+                </label>
+                <input
+                  type="email"
+                  value={formData.employeeEmail}
+                  onChange={e =>
+                    updateFormData('employeeEmail', e.target.value)
+                  }
+                  placeholder="employee@company.com"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
             </div>
           </div>
         );
-        
+
       case 2:
         return (
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray-900">Device Details</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Device Type *
-                </label>
-                <select
-                  value={formData.deviceType}
-                  onChange={(e) => updateFormData('deviceType', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Device Type</option>
-                  <option value="laptop">Laptop</option>
-                  <option value="desktop">Desktop</option>
-                  <option value="tablet">Tablet</option>
-                  <option value="phone">Phone</option>
-                  <option value="monitor">Monitor</option>
-                  <option value="accessories">Accessories</option>
-                </select>
+            <div className="text-center mb-8">
+              <div className="bg-green-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Monitor className="w-8 h-8 text-green-600" />
               </div>
-              
+              <h2 className="text-2xl font-bold text-gray-900">
+                Device Details
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Specify the device information and condition.
+              </p>
+            </div>
+
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brand *
+                  Device Brand *
                 </label>
                 <select
                   value={formData.deviceBrand}
-                  onChange={(e) => updateFormData('deviceBrand', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={e => updateFormData('deviceBrand', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="">Select Brand</option>
-                  <option value="apple">Apple</option>
-                  <option value="dell">Dell</option>
-                  <option value="hp">HP</option>
-                  <option value="lenovo">Lenovo</option>
-                  <option value="microsoft">Microsoft</option>
-                  <option value="samsung">Samsung</option>
-                  <option value="other">Other</option>
+                  <option value="">Select brand...</option>
+                  {deviceBrands.map(brand => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Model *
+                  Device Model *
                 </label>
                 <input
                   type="text"
                   value={formData.deviceModel}
-                  onChange={(e) => updateFormData('deviceModel', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="MacBook Pro 13\ 2022"
+                  onChange={e => updateFormData('deviceModel', e.target.value)}
+                  placeholder="e.g., MacBook Pro 16\ 2022, ThinkPad X1 Carbon"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Serial Number *
+                  Serial Number (Optional)
                 </label>
                 <input
                   type="text"
                   value={formData.serialNumber}
-                  onChange={(e) => updateFormData('serialNumber', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="ABC123XYZ"
+                  onChange={e => updateFormData('serialNumber', e.target.value)}
+                  placeholder="Enter serial number if known"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  If not provided, employee will be prompted to enter it.
+                </p>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Condition *
+                  Device Condition
                 </label>
-                <select
-                  value={formData.condition}
-                  onChange={(e) => updateFormData('condition', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Condition</option>
-                  <option value="excellent">Excellent</option>
-                  <option value="good">Good</option>
-                  <option value="fair">Fair</option>
-                  <option value="poor">Poor</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Purchase Date
-                </label>
-                <input
-                  type="date"
-                  value={formData.purchaseDate}
-                  onChange={(e) => updateFormData('purchaseDate', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {deviceConditions.map(condition => (
+                    <label key={condition.value} className="relative">
+                      <input
+                        type="radio"
+                        name="condition"
+                        value={condition.value}
+                        checked={formData.condition === condition.value}
+                        onChange={e =>
+                          updateFormData('condition', e.target.value)
+                        }
+                        className="sr-only"
+                      />
+                      <div
+                        className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                          formData.condition === condition.value
+                            ? 'border-primary-500 bg-primary-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="font-medium text-gray-900">
+                          {condition.label}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {condition.description}
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         );
-        
+
       case 3:
         return (
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray-900">Pricing Information</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="text-center mb-8">
+              <div className="bg-yellow-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <DollarSign className="w-8 h-8 text-yellow-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Set Price & Terms
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Determine the offer price and any additional notes.
+              </p>
+            </div>
+
+            <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Original Purchase Price
+                  Offer Price (USD) *
                 </label>
-                <input
-                  type="number"
-                  value={formData.originalPrice}
-                  onChange={(e) => updateFormData('originalPrice', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="2500"
-                />
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    value={formData.price}
+                    onChange={e => updateFormData('price', e.target.value)}
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg font-medium"
+                  />
+                </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Suggested Sale Price
-                </label>
-                <input
-                  type="number"
-                  value={formData.suggestedPrice}
-                  onChange={(e) => updateFormData('suggestedPrice', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="1200"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Final Offer Price *
-                </label>
-                <input
-                  type="number"
-                  value={formData.finalPrice}
-                  onChange={(e) => updateFormData('finalPrice', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="1200"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Offer Expiry Date
-                </label>
-                <input
-                  type="date"
-                  value={formData.offerExpiry}
-                  onChange={(e) => updateFormData('offerExpiry', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Pricing Reason/Notes
+                  Additional Notes (Optional)
                 </label>
                 <textarea
-                  value={formData.priceReason}
-                  onChange={(e) => updateFormData('priceReason', e.target.value)}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Explain the pricing rationale..."
+                  value={formData.notes}
+                  onChange={e => updateFormData('notes', e.target.value)}
+                  placeholder="Any special conditions, pickup instructions, or additional information..."
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                 />
               </div>
-              
-              <div className="md:col-span-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="includeAccessories"
-                    checked={formData.includeAccessories}
-                    onChange={(e) => updateFormData('includeAccessories', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="includeAccessories" className="ml-2 block text-sm text-gray-900">
-                    Include accessories (charger, case, etc.)
-                  </label>
-                </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-medium text-blue-900 mb-2">Offer Terms</h4>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Offer expires in 7 days from creation</li>
+                  <li>• Employee must sign waiver before payment</li>
+                  <li>• Device must be wiped before handover</li>
+                  <li>• Payment processed after device confirmation</li>
+                </ul>
               </div>
             </div>
           </div>
         );
-        
+
       case 4:
         return (
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray-900">Review & Send Offer</h3>
-            
-            <div className="bg-gray-50 rounded-lg p-6 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="text-center mb-8">
+              <div className="bg-purple-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Eye className="w-8 h-8 text-purple-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Review & Create Offer
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Please review all details before creating the offer.
+              </p>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-6">
+              <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Employee Information</h4>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div>Name: {formData.employeeName}</div>
-                    <div>Email: {formData.employeeEmail}</div>
-                    <div>Department: {formData.employeeDepartment}</div>
-                    <div>ID: {formData.employeeId}</div>
-                  </div>
+                  <h3 className="font-medium text-gray-900 mb-2">Employee</h3>
+                  <p className="text-gray-700">{formData.employeeName}</p>
+                  <p className="text-gray-600 text-sm">
+                    {formData.employeeEmail}
+                  </p>
                 </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Device Information</h4>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div>Type: {formData.deviceType}</div>
-                    <div>Brand: {formData.deviceBrand}</div>
-                    <div>Model: {formData.deviceModel}</div>
-                    <div>Serial: {formData.serialNumber}</div>
-                    <div>Condition: {formData.condition}</div>
-                  </div>
+
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="font-medium text-gray-900 mb-2">Device</h3>
+                  <p className="text-gray-700">
+                    {formData.deviceBrand} {formData.deviceModel}
+                  </p>
+                  {formData.serialNumber && (
+                    <p className="text-gray-600 text-sm">
+                      Serial: {formData.serialNumber}
+                    </p>
+                  )}
+                  <p className="text-gray-600 text-sm">
+                    Condition: {formData.condition}
+                  </p>
                 </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Pricing</h4>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div>Original Price: ${formData.originalPrice}</div>
-                    <div>Suggested Price: ${formData.suggestedPrice}</div>
-                    <div className="font-medium text-gray-900">Final Price: ${formData.finalPrice}</div>
-                    <div>Expires: {formData.offerExpiry}</div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Additional Options</h4>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div>Accessories: {formData.includeAccessories ? 'Included' : 'Not included'}</div>
-                    {formData.priceReason && <div>Notes: {formData.priceReason}</div>}
-                  </div>
+
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="font-medium text-gray-900 mb-2">Price</h3>
+                  <p className="text-2xl font-bold text-green-600">
+                    ${formData.price}
+                  </p>
+                  {formData.notes && (
+                    <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700">
+                        Notes:
+                      </p>
+                      <p className="text-sm text-gray-600">{formData.notes}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-medium text-blue-900 mb-2">What happens next?</h4>
-              <div className="text-sm text-blue-800 space-y-1">
-                <div>• Employee will receive an email with the offer details</div>
-                <div>• They can accept or decline the offer through a secure link</div>
-                <div>• You'll be notified of their response and next steps</div>
-                <div>• Device data wiping will be initiated upon acceptance</div>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-yellow-900">
+                    Before you proceed
+                  </h4>
+                  <p className="text-sm text-yellow-800 mt-1">
+                    This will create a new offer and send credentials to the
+                    employee. Make sure all information is correct as some
+                    details cannot be changed later.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         );
-        
+
+      case 5:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <div className="bg-green-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Offer Created Successfully!
+              </h2>
+              <p className="text-gray-600 mt-2">
+                The sale offer has been created. Here are the access details.
+              </p>
+            </div>
+
+            {generatedOffer && (
+              <div className="space-y-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <h3 className="font-medium text-green-900 mb-4">
+                    Offer Details
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-green-700">Employee:</span>
+                      <span className="font-medium">
+                        {generatedOffer.employeeName}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-green-700">Device:</span>
+                      <span className="font-medium">
+                        {generatedOffer.deviceBrand}{' '}
+                        {generatedOffer.deviceModel}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-green-700">Price:</span>
+                      <span className="font-bold text-green-600">
+                        ${generatedOffer.price}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <h3 className="font-medium text-blue-900 mb-4">
+                    Employee Access Credentials
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-1">
+                        Offer Link
+                      </label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          value={generatedOffer.offerLink}
+                          readOnly
+                          className="flex-1 px-3 py-2 bg-white border border-blue-300 rounded text-sm"
+                        />
+                        <button
+                          onClick={() =>
+                            copyToClipboard(
+                              generatedOffer.offerLink,
+                              'Offer link'
+                            )
+                          }
+                          className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-1">
+                        Username
+                      </label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          value={generatedOffer.username}
+                          readOnly
+                          className="flex-1 px-3 py-2 bg-white border border-blue-300 rounded text-sm font-mono"
+                        />
+                        <button
+                          onClick={() =>
+                            copyToClipboard(generatedOffer.username, 'Username')
+                          }
+                          className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-1">
+                        Password
+                      </label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          value={generatedOffer.password}
+                          readOnly
+                          className="flex-1 px-3 py-2 bg-white border border-blue-300 rounded text-sm font-mono"
+                        />
+                        <button
+                          onClick={() =>
+                            copyToClipboard(generatedOffer.password, 'Password')
+                          }
+                          className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-2">Next Steps</h4>
+                  <ul className="text-sm text-gray-700 space-y-1">
+                    <li>✅ Offer created and saved to your dashboard</li>
+                    <li>
+                      📧 Email notification sent to employee with access details
+                    </li>
+                    <li>📧 Confirmation email sent to admin (you)</li>
+                    <li>⏰ Offer expires in 7 days from now</li>
+                    <li>👀 Employee can now access and review the offer</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
       default:
         return null;
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create New Offer</h1>
-          <p className="text-gray-600">Set up a device sale offer for an employee</p>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">
+              Create New Sale Offer
+            </h1>
+            <p className="text-sm text-gray-600">
+              Step {currentStep} of {currentStep === 5 ? 4 : 4}
+              {currentStep <= 4 &&
+                ` - ${steps.find(s => s.id === currentStep)?.description}`}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
-        <button
-          onClick={onComplete}
-          className="text-gray-500 hover:text-gray-700 flex items-center space-x-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Back to Offers</span>
-        </button>
-      </div>
 
-      {/* Progress Steps */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex items-center justify-between">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            const isActive = step.id === currentStep;
-            const isCompleted = step.id < currentStep;
-            
-            return (
-              <div key={step.id} className="flex items-center">
-                <div className={`
-                  flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
-                  ${isActive ? 'border-blue-600 bg-blue-600 text-white' : ''}
-                  ${isCompleted ? 'border-green-600 bg-green-600 text-white' : ''}
-                  ${!isActive && !isCompleted ? 'border-gray-300 text-gray-500' : ''}
-                `}>
-                  {isCompleted ? <Check className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
-                </div>
-                <div className="ml-3 hidden sm:block">
-                  <div className={`text-sm font-medium ${isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'}`}>
-                    Step {step.id}
+        {/* Progress Steps */}
+        {currentStep <= 4 && (
+          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+            <div className="flex items-center space-x-4">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      step.id < currentStep
+                        ? 'bg-green-500 text-white'
+                        : step.id === currentStep
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-gray-200 text-gray-600'
+                    }`}
+                  >
+                    {step.id < currentStep ? '✓' : step.id}
                   </div>
-                  <div className={`text-sm ${isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'}`}>
+                  <span
+                    className={`ml-2 text-sm font-medium ${
+                      step.id <= currentStep ? 'text-gray-900' : 'text-gray-500'
+                    }`}
+                  >
                     {step.title}
-                  </div>
+                  </span>
+                  {index < steps.length - 1 && (
+                    <div
+                      className={`w-8 h-0.5 mx-4 ${
+                        step.id < currentStep ? 'bg-green-500' : 'bg-gray-200'
+                      }`}
+                    />
+                  )}
                 </div>
-                
-                {index < steps.length - 1 && (
-                  <div className={`hidden sm:block w-16 h-0.5 ml-6 ${isCompleted ? 'bg-green-600' : 'bg-gray-300'}`} />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Form Content */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        {renderStepContent()}
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="flex justify-between">
-        <button
-          onClick={prevStep}
-          disabled={currentStep === 1}
-          className={`
-            flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors
-            ${currentStep === 1 
-              ? 'border-gray-300 text-gray-400 cursor-not-allowed' 
-              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-            }
-          `}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Previous</span>
-        </button>
-
-        {currentStep < steps.length ? (
-          <button
-            onClick={nextStep}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <span>Next</span>
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        ) : (
-          <button
-            onClick={handleSubmit}
-            className="flex items-center space-x-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <Send className="h-4 w-4" />
-            <span>Send Offer</span>
-          </button>
+              ))}
+            </div>
+          </div>
         )}
+
+        {/* Content */}
+        <div className="p-6 overflow-y-auto max-h-[60vh]">
+          {renderStepContent()}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
+          <div>
+            {currentStep > 1 && currentStep <= 4 && (
+              <button
+                onClick={() => setCurrentStep(currentStep - 1)}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back</span>
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-4">
+            {currentStep === 5 ? (
+              <button
+                onClick={() => {
+                  onSuccess(generatedOffer);
+                  onClose();
+                }}
+                className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              >
+                Done
+              </button>
+            ) : currentStep === 4 ? (
+              <button
+                onClick={handleSubmit}
+                disabled={!canProceed || isSubmitting}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
+                  canProceed && !isSubmitting
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Creating Offer...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    <span>Create Offer</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={() => setCurrentStep(currentStep + 1)}
+                disabled={!canProceed}
+                className={`flex items-center space-x-2 px-6 py-2 rounded-lg font-medium transition-colors ${
+                  canProceed
+                    ? 'bg-primary-600 text-white hover:bg-primary-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                <span>Next</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

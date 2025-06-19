@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Info, X, Zap } from 'lucide-react';
 
 export default function MessageAlert({ message, onClose }) {
   useEffect(() => {
@@ -19,62 +19,55 @@ export default function MessageAlert({ message, onClose }) {
   const getIcon = () => {
     switch (message.type) {
       case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-400" />;
+        return <CheckCircle className="w-6 h-6 text-green-500" />;
       case 'error':
-        return <XCircle className="h-5 w-5 text-red-400" />;
-      case 'warning':
-        return <AlertCircle className="h-5 w-5 text-yellow-400" />;
+        return <AlertTriangle className="w-6 h-6 text-red-500" />;
+      case 'info':
       default:
-        return <Info className="h-5 w-5 text-blue-400" />;
+        return <Info className="w-6 h-6 text-blue-500" />;
     }
   };
 
-  const getBackgroundColor = () => {
+  const getStyles = () => {
     switch (message.type) {
       case 'success':
-        return 'bg-green-50 border-green-200';
+        return 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 text-green-800 shadow-green-100';
       case 'error':
-        return 'bg-red-50 border-red-200';
-      case 'warning':
-        return 'bg-yellow-50 border-yellow-200';
+        return 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200 text-red-800 shadow-red-100';
+      case 'info':
       default:
-        return 'bg-blue-50 border-blue-200';
-    }
-  };
-
-  const getTextColor = () => {
-    switch (message.type) {
-      case 'success':
-        return 'text-green-800';
-      case 'error':
-        return 'text-red-800';
-      case 'warning':
-        return 'text-yellow-800';
-      default:
-        return 'text-blue-800';
+        return 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 text-blue-800 shadow-blue-100';
     }
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 max-w-sm w-full animate-slide-in">
-      <div className={`rounded-lg border p-4 shadow-lg ${getBackgroundColor()}`}>
-        <div className="flex items-start">
-          <div className="flex-shrink-0">
-            {getIcon()}
-          </div>
-          <div className="ml-3 flex-1">
-            <p className={`text-sm font-medium ${getTextColor()}`}>
+    <div className="fixed top-20 right-4 z-50 max-w-md w-full animate-slide-in-right">
+      <div
+        className={`${getStyles()} border rounded-2xl p-4 shadow-2xl backdrop-blur-sm`}
+      >
+        <div className="flex items-start space-x-3">
+          <div className="flex-shrink-0 p-1">{getIcon()}</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold leading-tight">
               {message.text}
             </p>
           </div>
-          <div className="ml-auto pl-3">
-            <button
-              onClick={onClose}
-              className={`rounded-md p-1.5 hover:bg-opacity-75 transition-colors ${getTextColor()}`}
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="flex-shrink-0 p-1 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-white/50"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mt-3 w-full bg-white/30 rounded-full h-1 overflow-hidden">
+          <div
+            className="bg-current h-full rounded-full animate-shrink-width"
+            style={{
+              animation: 'shrink-width 5s linear forwards',
+            }}
+          ></div>
         </div>
       </div>
     </div>
