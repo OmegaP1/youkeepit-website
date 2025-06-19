@@ -7,6 +7,7 @@ import CompanyHeader from './components/layout/CompanyHeader';
 import CompanySidebar from './components/layout/CompanySidebar';
 import DashboardOverview from './components/dashboard/DashboardOverview';
 import OffersManager from './components/offers/OffersManager';
+import EmployeesManager from './components/employees/EmployeesManager';
 import ProfileSettings from './components/settings/ProfileSettings';
 import SettingsManager from './components/settings/SettingsManager';
 
@@ -65,19 +66,7 @@ export default function CompanyPage() {
       case 'offers':
         return <OffersManager showMessage={showMessage} />;
       case 'employees':
-        return (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl">👥</span>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Employee Management
-            </h3>
-            <p className="text-gray-600">
-              Employee management features coming soon!
-            </p>
-          </div>
-        );
+        return <EmployeesManager showMessage={showMessage} />;
       case 'devices':
         return (
           <div className="text-center py-12">
