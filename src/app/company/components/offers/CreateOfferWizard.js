@@ -116,46 +116,36 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
 
     setGeneratedOffer(newOffer);
     setIsSubmitting(false);
-    setCurrentStep(5); // Move to success step
+    setCurrentStep(5);
+    showMessage('Offer created successfully!', 'success');
   };
 
-  const copyToClipboard = (text, type) => {
-    if (typeof window !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text);
-      showMessage(`${type} copied to clipboard!`, 'success');
-    } else {
-      showMessage('Clipboard not available', 'error');
-    }
-  };
-
-  const validateStep = step => {
-    switch (step) {
+  // Check if current step can proceed
+  const canProceed = () => {
+    switch (currentStep) {
       case 1:
-        return formData.employeeName && formData.employeeEmail;
+        return formData.employeeName.trim() && formData.employeeEmail.trim();
       case 2:
-        return formData.deviceBrand && formData.deviceModel;
+        return formData.deviceBrand && formData.deviceModel.trim();
       case 3:
         return formData.price && parseFloat(formData.price) > 0;
-      default:
+      case 4:
         return true;
+      default:
+        return false;
     }
   };
-
-  const canProceed = validateStep(currentStep);
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
           <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="bg-blue-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <User className="w-8 h-8 text-blue-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Employee Information
               </h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600">
                 Enter the employee details for this device sale offer.
               </p>
             </div>
@@ -169,8 +159,8 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
                   type="text"
                   value={formData.employeeName}
                   onChange={e => updateFormData('employeeName', e.target.value)}
-                  placeholder="Enter employee's full name"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="Enter employee full name"
                 />
               </div>
 
@@ -184,8 +174,8 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
                   onChange={e =>
                     updateFormData('employeeEmail', e.target.value)
                   }
-                  placeholder="employee@company.com"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="employee@company.com"
                 />
               </div>
             </div>
@@ -195,14 +185,11 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
       case 2:
         return (
           <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="bg-green-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Monitor className="w-8 h-8 text-green-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Device Details
               </h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600">
                 Specify the device information and condition.
               </p>
             </div>
@@ -217,7 +204,7 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
                   onChange={e => updateFormData('deviceBrand', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
-                  <option value="">Select brand...</option>
+                  <option value="">Select a brand</option>
                   {deviceBrands.map(brand => (
                     <option key={brand} value={brand}>
                       {brand}
@@ -234,34 +221,34 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
                   type="text"
                   value={formData.deviceModel}
                   onChange={e => updateFormData('deviceModel', e.target.value)}
-                  placeholder="e.g., MacBook Pro 16\ 2022, ThinkPad X1 Carbon"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="e.g., MacBook Pro 16-inch 2022"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Serial Number (Optional)
+                  Serial Number
                 </label>
                 <input
                   type="text"
                   value={formData.serialNumber}
                   onChange={e => updateFormData('serialNumber', e.target.value)}
-                  placeholder="Enter serial number if known"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="Device serial number"
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  If not provided, employee will be prompted to enter it.
-                </p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Device Condition
+                  Condition
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-2">
                   {deviceConditions.map(condition => (
-                    <label key={condition.value} className="relative">
+                    <label
+                      key={condition.value}
+                      className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                    >
                       <input
                         type="radio"
                         name="condition"
@@ -270,15 +257,9 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
                         onChange={e =>
                           updateFormData('condition', e.target.value)
                         }
-                        className="sr-only"
+                        className="mr-3"
                       />
-                      <div
-                        className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.condition === condition.value
-                            ? 'border-primary-500 bg-primary-50'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
+                      <div>
                         <div className="font-medium text-gray-900">
                           {condition.label}
                         </div>
@@ -297,60 +278,47 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
       case 3:
         return (
           <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="bg-yellow-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <DollarSign className="w-8 h-8 text-yellow-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Set Price & Terms
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Pricing & Terms
               </h2>
-              <p className="text-gray-600 mt-2">
-                Determine the offer price and any additional notes.
+              <p className="text-gray-600">
+                Set the sale price and any additional notes.
               </p>
             </div>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Offer Price (USD) *
+                  Sale Price *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                     $
                   </span>
                   <input
                     type="number"
                     value={formData.price}
                     onChange={e => updateFormData('price', e.target.value)}
+                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="0.00"
                     min="0"
                     step="0.01"
-                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg font-medium"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Additional Notes (Optional)
+                  Additional Notes
                 </label>
                 <textarea
                   value={formData.notes}
                   onChange={e => updateFormData('notes', e.target.value)}
-                  placeholder="Any special conditions, pickup instructions, or additional information..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="Any additional information about the device or sale..."
                 />
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-medium text-blue-900 mb-2">Offer Terms</h4>
-                <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• Offer expires in 7 days from creation</li>
-                  <li>• Employee must sign waiver before payment</li>
-                  <li>• Device must be wiped before handover</li>
-                  <li>• Payment processed after device confirmation</li>
-                </ul>
               </div>
             </div>
           </div>
@@ -359,15 +327,12 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
       case 4:
         return (
           <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="bg-purple-100 p-3 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Eye className="w-8 h-8 text-purple-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Review & Create Offer
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Review & Create
               </h2>
-              <p className="text-gray-600 mt-2">
-                Please review all details before creating the offer.
+              <p className="text-gray-600">
+                Review all details before creating the offer.
               </p>
             </div>
 
@@ -454,6 +419,10 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
                   </h3>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
+                      <span className="text-sm text-green-700">Offer ID:</span>
+                      <span className="font-bold">{generatedOffer.id}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
                       <span className="text-sm text-green-700">Employee:</span>
                       <span className="font-medium">
                         {generatedOffer.employeeName}
@@ -477,91 +446,48 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                   <h3 className="font-medium text-blue-900 mb-4">
-                    Employee Access Credentials
+                    Access Credentials
                   </h3>
                   <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-1">
-                        Offer Link
-                      </label>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-blue-700">Username:</span>
                       <div className="flex items-center space-x-2">
-                        <input
-                          type="text"
-                          value={generatedOffer.offerLink}
-                          readOnly
-                          className="flex-1 px-3 py-2 bg-white border border-blue-300 rounded text-sm"
-                        />
+                        <code className="bg-white px-2 py-1 rounded border">
+                          {generatedOffer.username}
+                        </code>
                         <button
-                          onClick={() =>
-                            copyToClipboard(
-                              generatedOffer.offerLink,
-                              'Offer link'
-                            )
-                          }
-                          className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              generatedOffer.username
+                            );
+                            showMessage('Username copied!', 'success');
+                          }}
+                          className="text-blue-600 hover:text-blue-800"
                         >
                           <Copy className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-1">
-                        Username
-                      </label>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-blue-700">Password:</span>
                       <div className="flex items-center space-x-2">
-                        <input
-                          type="text"
-                          value={generatedOffer.username}
-                          readOnly
-                          className="flex-1 px-3 py-2 bg-white border border-blue-300 rounded text-sm font-mono"
-                        />
+                        <code className="bg-white px-2 py-1 rounded border">
+                          {generatedOffer.password}
+                        </code>
                         <button
-                          onClick={() =>
-                            copyToClipboard(generatedOffer.username, 'Username')
-                          }
-                          className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                        >
-                          <Copy className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-1">
-                        Password
-                      </label>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="text"
-                          value={generatedOffer.password}
-                          readOnly
-                          className="flex-1 px-3 py-2 bg-white border border-blue-300 rounded text-sm font-mono"
-                        />
-                        <button
-                          onClick={() =>
-                            copyToClipboard(generatedOffer.password, 'Password')
-                          }
-                          className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              generatedOffer.password
+                            );
+                            showMessage('Password copied!', 'success');
+                          }}
+                          className="text-blue-600 hover:text-blue-800"
                         >
                           <Copy className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Next Steps</h4>
-                  <ul className="text-sm text-gray-700 space-y-1">
-                    <li>✅ Offer created and saved to your dashboard</li>
-                    <li>
-                      📧 Email notification sent to employee with access details
-                    </li>
-                    <li>📧 Confirmation email sent to admin (you)</li>
-                    <li>⏰ Offer expires in 7 days from now</li>
-                    <li>👀 Employee can now access and review the offer</li>
-                  </ul>
                 </div>
               </div>
             )}
@@ -574,131 +500,142 @@ export default function CreateOfferWizard({ onClose, onSuccess, showMessage }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">
-              Create New Sale Offer
-            </h1>
-            <p className="text-sm text-gray-600">
-              Step {currentStep} of {currentStep === 5 ? 4 : 4}
-              {currentStep <= 4 &&
-                ` - ${steps.find(s => s.id === currentStep)?.description}`}
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
+    // MODAL BACKDROP - THIS WAS MISSING!
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        onClick={onClose}
+      />
 
-        {/* Progress Steps */}
-        {currentStep <= 4 && (
-          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-            <div className="flex items-center space-x-4">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                      step.id < currentStep
-                        ? 'bg-green-500 text-white'
-                        : step.id === currentStep
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-gray-200 text-gray-600'
-                    }`}
-                  >
-                    {step.id < currentStep ? '✓' : step.id}
-                  </div>
-                  <span
-                    className={`ml-2 text-sm font-medium ${
-                      step.id <= currentStep ? 'text-gray-900' : 'text-gray-500'
-                    }`}
-                  >
-                    {step.title}
-                  </span>
-                  {index < steps.length - 1 && (
-                    <div
-                      className={`w-8 h-0.5 mx-4 ${
-                        step.id < currentStep ? 'bg-green-500' : 'bg-gray-200'
-                      }`}
-                    />
-                  )}
-                </div>
-              ))}
+      {/* Modal Container */}
+      <div className="flex min-h-full items-center justify-center p-4">
+        {/* Modal Content */}
+        <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Create New Offer
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Set up a device sale offer for an employee
+              </p>
             </div>
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
-          {renderStepContent()}
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-          <div>
-            {currentStep > 1 && currentStep <= 4 && (
-              <button
-                onClick={() => setCurrentStep(currentStep - 1)}
-                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back</span>
-              </button>
-            )}
+            <button
+              onClick={onClose}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
           </div>
 
-          <div className="flex items-center space-x-4">
-            {currentStep === 5 ? (
-              <button
-                onClick={() => {
-                  onSuccess(generatedOffer);
-                  onClose();
-                }}
-                className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
-              >
-                Done
-              </button>
-            ) : currentStep === 4 ? (
-              <button
-                onClick={handleSubmit}
-                disabled={!canProceed || isSubmitting}
-                className={`px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-                  canProceed && !isSubmitting
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Creating Offer...</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="w-4 h-4" />
-                    <span>Create Offer</span>
-                  </>
-                )}
-              </button>
-            ) : (
-              <button
-                onClick={() => setCurrentStep(currentStep + 1)}
-                disabled={!canProceed}
-                className={`flex items-center space-x-2 px-6 py-2 rounded-lg font-medium transition-colors ${
-                  canProceed
-                    ? 'bg-primary-600 text-white hover:bg-primary-700'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                <span>Next</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            )}
+          {/* Progress Steps */}
+          {currentStep <= 4 && (
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                {steps.map((step, index) => (
+                  <div key={step.id} className="flex items-center">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        step.id < currentStep
+                          ? 'bg-green-500 text-white'
+                          : step.id === currentStep
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-gray-200 text-gray-600'
+                      }`}
+                    >
+                      {step.id < currentStep ? '✓' : step.id}
+                    </div>
+                    <span
+                      className={`ml-2 text-sm font-medium ${
+                        step.id <= currentStep
+                          ? 'text-gray-900'
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      {step.title}
+                    </span>
+                    {index < steps.length - 1 && (
+                      <div
+                        className={`w-8 h-0.5 mx-4 ${
+                          step.id < currentStep ? 'bg-green-500' : 'bg-gray-200'
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="p-6 overflow-y-auto max-h-[60vh]">
+            {renderStepContent()}
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
+            <div>
+              {currentStep > 1 && currentStep <= 4 && (
+                <button
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-4">
+              {currentStep === 5 ? (
+                <button
+                  onClick={() => {
+                    onSuccess(generatedOffer);
+                    onClose();
+                  }}
+                  className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                >
+                  Done
+                </button>
+              ) : currentStep === 4 ? (
+                <button
+                  onClick={handleSubmit}
+                  disabled={!canProceed() || isSubmitting}
+                  className={`px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
+                    canProceed() && !isSubmitting
+                      ? 'bg-green-600 text-white hover:bg-green-700'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Creating Offer...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      <span>Create Offer</span>
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => setCurrentStep(currentStep + 1)}
+                  disabled={!canProceed()}
+                  className={`flex items-center space-x-2 px-6 py-2 rounded-lg font-medium transition-colors ${
+                    canProceed()
+                      ? 'bg-primary-600 text-white hover:bg-primary-700'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  <span>Next</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

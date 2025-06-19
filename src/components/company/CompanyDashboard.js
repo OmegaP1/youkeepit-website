@@ -1,24 +1,33 @@
-// src/components/company/CompanyDashboard.js
+// src/app/company/components/CompanyDashboard.js
 'use client';
 
 import { useState, useEffect } from 'react';
-import CompanyLayout from '@/app/company/components/layout/CompanyLayout';
-import LoadingScreen from '@/app/company/components/ui/LoadingScreen';
-import MessageAlert from '@/app/company/components/ui/MessageAlert';
-import DashboardOverview from '@/app/company/components/dashboard/DashboardOverview';
-import OffersManager from '@/app/company/components/offers/OffersManager';
-import EmployeesManager from '@/app/company/components/employees/EmployeesManager';
-import DevicesManager from '@/app/company/components/devices/DevicesManager';
-import TransactionsManager from '@/app/company/components/transactions/TransactionsManager';
-import ReportsManager from '@/app/company/components/reports/ReportsManager';
-import SettingsManager from '@/app/company/components/settings/SettingsManager';
-import { useMessage } from '@/hooks/useMessage';
+import CompanyLayout from './layout/CompanyLayout';
+import LoadingScreen from './ui/LoadingScreen';
+import MessageAlert from './ui/MessageAlert';
+import DashboardOverview from './dashboard/DashboardOverview';
+import OffersManager from './offers/OffersManager';
+import EmployeesManager from './employees/EmployeesManager';
+import DevicesManager from './devices/DevicesManager';
+import TransactionsManager from './transactions/TransactionsManager';
+import ReportsManager from './reports/ReportsManager';
+import SettingsManager from './settings/SettingsManager';
 
 export default function CompanyDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { message, showMessage, clearMessage } = useMessage();
+  const [message, setMessage] = useState(null);
+
+  // Message management
+  const showMessage = (text, type = 'info') => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage(null), 5000);
+  };
+
+  const clearMessage = () => {
+    setMessage(null);
+  };
 
   // Ensure component is mounted on client side
   useEffect(() => {
@@ -36,60 +45,96 @@ export default function CompanyDashboard({ onLogout }) {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('companyAuth');
     }
-
     onLogout();
   };
 
-  const handleTabChange = newTab => {
-    setActiveTab(newTab);
+  const handleTabChange = tab => {
+    // Add loading state for tab transitions
+    setLoading(true);
+
+    setTimeout(() => {
+      setActiveTab(tab);
+      setLoading(false);
+
+      // Show navigation feedback
+      const tabNames = {
+        dashboard: 'Dashboard',
+        offers: 'Sale Offers',
+        employees: 'Employees',
+        devices: 'Devices',
+        transactions: 'Transactions',
+        reports: 'Reports',
+        settings: 'Settings',
+      };
+
+      if (tab !== 'dashboard') {
+        showMessage(`Switched to ${tabNames[tab]}`, 'info');
+      }
+    }, 300);
   };
 
-  // Prevent hydration mismatch
+  // Don't render until mounted to prevent hydration mismatch
   if (!mounted) {
     return <LoadingScreen />;
   }
-
-  const renderActiveComponent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <DashboardOverview />;
-      case 'offers':
-        return <OffersManager />;
-      case 'employees':
-        return <EmployeesManager />;
-      case 'devices':
-        return <DevicesManager />;
-      case 'transactions':
-        return <TransactionsManager />;
-      case 'reports':
-        return <ReportsManager />;
-      case 'settings':
-        return <SettingsManager />;
-      default:
-        return <DashboardOverview />;
-    }
-  };
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  return (
-    <div>
-      {message && (
-        <MessageAlert
-          message={message.text}
-          type={message.type}
-          onClose={clearMessage}
-        />
-      )}
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return (
+          <DashboardOverview
+            showMessage={showMessage}
+            onNavigateToOffers={() => handleTabChange('offers')}
+          />
+        );
+      case 'offers':
+        return <OffersManager showMessage={showMessage} />;
+      case 'employees':
+        return <EmployeesManager showMessage={showMessage} />;
+      case 'devices':
+        return <DevicesManager showMessage={showMessage} />;
+      case 'transactions':
+        return <TransactionsManager showMessage={showMessage} />;
+      case 'reports':
+        return <ReportsManager showMessage={showMessage} />;
+      case 'settings':
+        return <SettingsManager showMessage={showMessage} />;
+      default:
+        return (
+          <DashboardOverview
+            showMessage={showMessage}
+            onNavigateToOffers={() => handleTabChange('offers')}
+          />
+        );
+    }
+  };
 
+  return (
+    <div className="min-h-screen bg-gray-50">
       <CompanyLayout
         activeTab={activeTab}
         onTabChange={handleTabChange}
         onLogout={handleLogout}
       >
-        {renderActiveComponent()}
+        {/* Message Alert */}
+        {message && (
+          <div className="fixed top-20 right-4 z-50">
+            <MessageAlert
+              message={message.text}
+              type={message.type}
+              onClose={clearMessage}
+            />
+          </div>
+        )}
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-6">{renderTabContent()}</div>
+        </main>
       </CompanyLayout>
     </div>
   );
