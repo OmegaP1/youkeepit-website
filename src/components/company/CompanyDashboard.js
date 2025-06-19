@@ -36,131 +36,61 @@ export default function CompanyDashboard({ onLogout }) {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('companyAuth');
     }
+
     onLogout();
   };
 
-  const handleTabChange = tab => {
-    // Add loading state for tab transitions
-    setLoading(true);
-
-    setTimeout(() => {
-      setActiveTab(tab);
-      setLoading(false);
-
-      // Show navigation feedback
-      const tabNames = {
-        dashboard: 'Dashboard',
-        offers: 'Sale Offers',
-        employees: 'Employees',
-        devices: 'Devices',
-        transactions: 'Transactions',
-        reports: 'Reports',
-        settings: 'Settings',
-      };
-
-      if (tab !== 'dashboard') {
-        showMessage(`Switched to ${tabNames[tab]}`, 'info');
-      }
-    }, 300);
+  const handleTabChange = newTab => {
+    setActiveTab(newTab);
   };
 
-  // Don't render until mounted to prevent hydration mismatch
+  // Prevent hydration mismatch
   if (!mounted) {
     return <LoadingScreen />;
   }
+
+  const renderActiveComponent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <DashboardOverview />;
+      case 'offers':
+        return <OffersManager />;
+      case 'employees':
+        return <EmployeesManager />;
+      case 'devices':
+        return <DevicesManager />;
+      case 'transactions':
+        return <TransactionsManager />;
+      case 'reports':
+        return <ReportsManager />;
+      case 'settings':
+        return <SettingsManager />;
+      default:
+        return <DashboardOverview />;
+    }
+  };
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return (
-          <DashboardOverview
-            showMessage={showMessage}
-            onNavigateToOffers={() => handleTabChange('offers')}
-          />
-        );
-      case 'offers':
-        return <OffersManager showMessage={showMessage} />;
-      case 'employees':
-        return <EmployeesManager showMessage={showMessage} />;
-      case 'devices':
-        return <DevicesManager showMessage={showMessage} />;
-      case 'transactions':
-        return <TransactionsManager showMessage={showMessage} />;
-      case 'reports':
-        return <ReportsManager showMessage={showMessage} />;
-      case 'settings':
-        return <SettingsManager showMessage={showMessage} />;
-      default:
-        return (
-          <DashboardOverview
-            showMessage={showMessage}
-            onNavigateToOffers={() => handleTabChange('offers')}
-          />
-        );
-    }
-  };
-
   return (
-    <>
+    <div>
+      {message && (
+        <MessageAlert
+          message={message.text}
+          type={message.type}
+          onClose={clearMessage}
+        />
+      )}
+
       <CompanyLayout
         activeTab={activeTab}
         onTabChange={handleTabChange}
         onLogout={handleLogout}
       >
-        <div className="animate-fade-in">{renderTabContent()}</div>
+        {renderActiveComponent()}
       </CompanyLayout>
-
-      <MessageAlert message={message} onClose={clearMessage} />
-
-      {/* Add custom CSS for animations */}
-      <style jsx global>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slide-in-right {
-          from {
-            opacity: 0;
-            transform: translateX(100%);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes shrink-width {
-          from {
-            width: 100%;
-          }
-          to {
-            width: 0%;
-          }
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out;
-        }
-
-        .animate-slide-in-right {
-          animation: slide-in-right 0.3s ease-out;
-        }
-
-        .animate-shrink-width {
-          animation: shrink-width 5s linear forwards;
-        }
-      `}</style>
-    </>
+    </div>
   );
 }

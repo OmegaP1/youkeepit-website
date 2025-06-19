@@ -20,22 +20,27 @@ export function useCompanyAuth() {
 
     const checkAuth = () => {
       try {
-        const authData = localStorage.getItem('companyAuth');
-        if (authData) {
-          const parsed = JSON.parse(authData);
-          // Check if token is still valid (not expired)
-          if (parsed.expiresAt && Date.now() < parsed.expiresAt) {
-            setUser(parsed.user);
-            setIsAuthenticated(true);
-          } else {
-            // Token expired, remove it
-            localStorage.removeItem('companyAuth');
+        // Use a timeout to ensure DOM is fully loaded
+        setTimeout(() => {
+          const authData = localStorage.getItem('companyAuth');
+          if (authData) {
+            const parsed = JSON.parse(authData);
+            // Check if token is still valid (not expired)
+            if (parsed.expiresAt && Date.now() < parsed.expiresAt) {
+              setUser(parsed.user);
+              setIsAuthenticated(true);
+            } else {
+              // Token expired, remove it
+              localStorage.removeItem('companyAuth');
+            }
           }
-        }
+          setIsLoading(false);
+        }, 100);
       } catch (error) {
         console.error('Error parsing auth data:', error);
-        localStorage.removeItem('companyAuth');
-      } finally {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('companyAuth');
+        }
         setIsLoading(false);
       }
     };

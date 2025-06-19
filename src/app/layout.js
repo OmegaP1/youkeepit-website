@@ -1,12 +1,13 @@
-import { Inter } from 'next/font/google'
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import "./globals.css";
+// src/app/layout.js
+import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import './globals.css';
 
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
 });
 
 export const metadata = {
@@ -157,7 +158,7 @@ export default function RootLayout({ children }) {
       </head>
       <body
         className={`${inter.className} antialiased`}
-        suppressHydrationWarning
+        suppressHydrationWarning={true}
       >
         <div id="root">{children}</div>
         <Analytics />
