@@ -50,6 +50,8 @@ export async function POST(request) {
       const sessionToken = crypto.randomUUID() + '-' + Date.now();
       const expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000); // 8 hours
 
+      console.log('Creating session with token:', sessionToken); // Debug log
+
       // Create session in database
       const { error: sessionError } = await supabaseAdmin
         .from('company_user_sessions')
@@ -70,6 +72,8 @@ export async function POST(request) {
         );
       }
 
+      console.log('Session created successfully'); // Debug log
+
       // Log activity (optional - skip if it fails)
       try {
         await supabaseAdmin.rpc('log_activity', {
@@ -87,6 +91,14 @@ export async function POST(request) {
 
       console.log('Login successful for:', result.user.email); // Debug log
 
+      // Set cookie with broader path and less restrictive settings for debugging
+      const cookieSettings =
+        process.env.NODE_ENV === 'development'
+          ? `company_session=${sessionToken}; HttpOnly; SameSite=Lax; Max-Age=${8 * 60 * 60}; Path=/`
+          : `company_session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${8 * 60 * 60}; Path=/`;
+
+      console.log('Setting cookie:', cookieSettings); // Debug log
+
       return NextResponse.json(
         {
           success: true,
@@ -97,7 +109,7 @@ export async function POST(request) {
         {
           status: 200,
           headers: {
-            'Set-Cookie': `company_session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${8 * 60 * 60}; Path=/company`,
+            'Set-Cookie': cookieSettings,
           },
         }
       );
