@@ -1,20 +1,16 @@
 // src/app/admin/components/features/FeaturesManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import FeaturesList from "./components/FeaturesList";
 import FeatureForm from "./components/FeatureForm";
 import { useFeatures } from "./hooks/useFeatures";
 
 export default function FeaturesManager({ showMessage }) {
-  const { features, loading, fetchFeatures, createFeature, updateFeature, deleteFeature } = useFeatures();
+  const { features, loading, createFeature, updateFeature, deleteFeature } = useFeatures();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingFeature, setEditingFeature] = useState(null);
-
-  useEffect(() => {
-    fetchFeatures();
-  }, []);
 
   const handleCreate = async (featureData) => {
     const success = await createFeature(featureData);

@@ -1,7 +1,7 @@
 // src/app/admin/components/problem/hooks/useProblem.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DatabaseService } from "@/services/database";
 
 export function useProblem() {
@@ -9,10 +9,9 @@ export function useProblem() {
   const [problemStats, setProblemStats] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchProblemData = async () => {
+  const fetchProblemData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch problem content
       const contentData = await DatabaseService.getSiteContent('problem');
       const content = {};
       contentData.forEach(item => {
@@ -20,7 +19,6 @@ export function useProblem() {
       });
       setProblemContent(content);
 
-      // Fetch problem statistics
       const statsData = await DatabaseService.getProblemStats();
       setProblemStats(statsData);
     } catch (error) {
@@ -28,7 +26,11 @@ export function useProblem() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchProblemData();
+  }, [fetchProblemData]);
 
   const updateProblemContent = async (contentData) => {
     try {

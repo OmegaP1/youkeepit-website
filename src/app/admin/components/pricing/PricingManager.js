@@ -1,20 +1,16 @@
 // src/app/admin/components/pricing/PricingManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import PricingPlansList from "./components/PricingPlansList";
 import PricingPlanForm from "./components/PricingPlanForm";
 import { usePricing } from "./hooks/usePricing";
 
 export default function PricingManager({ showMessage }) {
-  const { plans, loading, fetchPlans, createPlan, updatePlan, deletePlan } = usePricing();
+  const { plans, loading, createPlan, updatePlan, deletePlan } = usePricing();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
-
-  useEffect(() => {
-    fetchPlans();
-  }, []);
 
   const handleCreate = async (planData) => {
     const success = await createPlan(planData);

@@ -1,20 +1,16 @@
 // src/app/admin/components/testimonials/TestimonialsManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import TestimonialsList from "./components/TestimonialsList";
 import TestimonialForm from "./components/TestimonialForm";
 import { useTestimonials } from "./hooks/useTestimonials";
 
 export default function TestimonialsManager({ showMessage }) {
-  const { testimonials, loading, fetchTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } = useTestimonials();
+  const { testimonials, loading, createTestimonial, updateTestimonial, deleteTestimonial } = useTestimonials();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
-
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
 
   const handleCreate = async (testimonialData) => {
     const success = await createTestimonial(testimonialData);

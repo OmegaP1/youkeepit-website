@@ -1,14 +1,14 @@
 // src/app/admin/components/pricing/hooks/usePricing.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
 export function usePricing() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchPlans = async () => {
+  const fetchPlans = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -25,7 +25,11 @@ export function usePricing() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchPlans();
+  }, [fetchPlans]);
 
   const createPlan = async (planData) => {
     try {

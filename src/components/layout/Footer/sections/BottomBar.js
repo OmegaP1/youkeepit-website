@@ -25,7 +25,7 @@ const BottomBar = ({ darkMode }) => {
               darkMode ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
-            &copy; 2025 YouKeepIt. All rights reserved.
+            &copy; 2025 KeepMyKit. All rights reserved.
           </p>
 
           {/* Security Badge */}
@@ -59,9 +59,9 @@ const BottomBar = ({ darkMode }) => {
 
         {/* Legal Links */}
         <div className="flex flex-wrap items-center gap-6">
-          {legalLinks.map((link, index) => (
+          {legalLinks.map((link) => (
             <a
-              key={index}
+              key={link.href ?? link.label}
               href={link.href}
               className={`text-sm transition-all duration-300 hover:underline ${
                 darkMode

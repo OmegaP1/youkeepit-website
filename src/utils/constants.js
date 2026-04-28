@@ -129,65 +129,68 @@ export const FEATURES_LIST = [
 // Testimonials
 export const TESTIMONIALS = [
   {
-    name: "Sarah Chen",
-    role: "IT Director, TechCorp",
-    content: "YouKeepIt transformed our equipment transition process. We've recovered over $500k in value this year alone while making our employees happy.",
-    rating: 5
+    name: 'Sarah Chen',
+    role: 'IT Director, TechCorp',
+    content:
+      "KeepMyKit transformed our equipment transition process. We've recovered over $500k in value this year alone while making our employees happy.",
+    rating: 5,
   },
   {
-    name: "Marcus Rodriguez",
-    role: "HR Manager, GrowthCo",
-    content: "The employee marketplace is brilliant. Our staff love getting quality devices at great prices, and we've eliminated equipment storage costs.",
-    rating: 5
+    name: 'Marcus Rodriguez',
+    role: 'HR Manager, GrowthCo',
+    content:
+      "The employee marketplace is brilliant. Our staff love getting quality devices at great prices, and we've eliminated equipment storage costs.",
+    rating: 5,
   },
   {
-    name: "Emma Thompson",
-    role: "CFO, ScaleTech",
-    content: "The ROI was immediate. We implemented YouKeepIt in one day and started seeing savings within the first week. Incredible platform.",
-    rating: 5
-  }
-]
+    name: 'Emma Thompson',
+    role: 'CFO, ScaleTech',
+    content:
+      'The ROI was immediate. We implemented KeepMyKit in one day and started seeing savings within the first week. Incredible platform.',
+    rating: 5,
+  },
+];
 
 // Pricing plans
 export const PRICING_PLANS = [
   {
-    name: "Starter",
-    price: "Free",
-    period: "",
-    description: "Perfect for small teams",
+    name: 'Starter',
+    price: 'Free',
+    period: '',
+    description: 'Perfect for small teams',
     features: [
-      "Up to 50 devices/year",
-      "Basic marketplace",
-      "Email support",
-      "Standard data wiping",
+      'Up to 50 devices/year',
+      'Basic marketplace',
+      'Email support',
+      'Standard data wiping',
     ],
     popular: false,
   },
   {
-    name: "Professional",
-    price: "$999",
-    period: "/month",
-    description: "Most popular for growing companies",
+    name: 'Professional',
+    price: '$999',
+    period: '/month',
+    description: 'Most popular for growing companies',
     features: [
-      "Up to 500 devices/year",
-      "Advanced analytics",
-      "Priority support",
-      "Custom branding",
-      "API access",
+      'Up to 500 devices/year',
+      'Advanced analytics',
+      'Priority support',
+      'Custom branding',
+      'API access',
     ],
     popular: true,
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    description: "For large organizations",
+    name: 'Enterprise',
+    price: 'Custom',
+    period: '',
+    description: 'For large organizations',
     features: [
-      "Unlimited devices",
-      "Dedicated success manager",
-      "Custom integrations",
-      "Advanced compliance",
-      "SLA guarantee",
+      'Unlimited devices',
+      'Dedicated success manager',
+      'Custom integrations',
+      'Advanced compliance',
+      'SLA guarantee',
     ],
     popular: false,
   },
@@ -196,23 +199,28 @@ export const PRICING_PLANS = [
 // FAQ items
 export const FAQ_ITEMS = [
   {
-    question: "How quickly can we implement YouKeepIt?",
-    answer: "Most companies are up and running within 24 hours. Our onboarding team guides you through the simple setup process, and integration with existing systems typically takes just a few hours."
+    question: 'How quickly can we implement KeepMyKit?',
+    answer:
+      'Most companies are up and running within 24 hours. Our onboarding team guides you through the simple setup process, and integration with existing systems typically takes just a few hours.',
   },
   {
-    question: "What happens to sensitive data on devices?",
-    answer: "We use military-grade data wiping procedures that exceed DOD 5220.22-M standards. All data destruction is certified and documented for compliance purposes."
+    question: 'What happens to sensitive data on devices?',
+    answer:
+      'We use military-grade data wiping procedures that exceed DOD 5220.22-M standards. All data destruction is certified and documented for compliance purposes.',
   },
   {
-    question: "How do you determine device pricing for employees?",
-    answer: "Our AI-powered pricing engine considers market value, device condition, age, and specs to offer fair pricing that benefits both the company and employees."
+    question: 'How do you determine device pricing for employees?',
+    answer:
+      'Our AI-powered pricing engine considers market value, device condition, age, and specs to offer fair pricing that benefits both the company and employees.',
   },
   {
-    question: "Can employees finance their purchases?",
-    answer: "Yes, we offer flexible payment options including payroll deduction, monthly payment plans, and third-party financing options."
+    question: 'Can employees finance their purchases?',
+    answer:
+      'Yes, we offer flexible payment options including payroll deduction, monthly payment plans, and third-party financing options.',
   },
   {
-    question: "What kind of support do you provide?",
-    answer: "We offer 24/7 technical support, dedicated customer success managers for Enterprise clients, and comprehensive documentation and training resources."
-  }
-]
+    question: 'What kind of support do you provide?',
+    answer:
+      'We offer 24/7 technical support, dedicated customer success managers for Enterprise clients, and comprehensive documentation and training resources.',
+  },
+];

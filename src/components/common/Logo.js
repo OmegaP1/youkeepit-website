@@ -39,16 +39,20 @@ const Logo = ({ variant = 'default', size = 'md' }) => {
   return (
     <div className="flex items-center space-x-2">
       <div className="relative">
-        <div className={`${currentSize.icon} rounded-xl bg-blue-600 flex items-center justify-center`}>
+        <div
+          className={`${currentSize.icon} rounded-xl bg-blue-600 flex items-center justify-center`}
+        >
           <Shield className={`${currentSize.iconSize} text-white`} />
-          <RotateCcw className={`${currentSize.refresh} text-white absolute -top-1 -right-1`} />
+          <RotateCcw
+            className={`${currentSize.refresh} text-white absolute -top-1 -right-1`}
+          />
         </div>
       </div>
       <span className={`${currentSize.text} font-bold ${textColor}`}>
-        YouKeepIt
+        KeepMyKit
       </span>
     </div>
-  )
+  );
 }
 
 export default Logo

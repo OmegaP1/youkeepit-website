@@ -1,167 +1,88 @@
 // src/components/sections/HowItWorks.js
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { DatabaseService } from "@/services/database";
+import { DatabaseService } from '@/services/database';
 import { WavePattern } from '@/components/backgrounds';
 
-const HowItWorks = ({ darkMode }) => {
-  const [steps, setSteps] = useState([]);
-  const [siteContent, setSiteContent] = useState({});
-  const [loading, setLoading] = useState(true);
+const FALLBACK_STEPS = [
+  {
+    id: 'fallback-1',
+    step_number: 1,
+    title: 'Upload Inventory',
+    description:
+      'Simply upload your device inventory or integrate with existing asset management systems.',
+    color: 'bg-blue-600',
+  },
+  {
+    id: 'fallback-2',
+    step_number: 2,
+    title: 'Employee Marketplace',
+    description:
+      'Employees browse available devices at discounted rates through our secure platform.',
+    color: 'bg-green-600',
+  },
+  {
+    id: 'fallback-3',
+    step_number: 3,
+    title: 'Secure Transfer',
+    description:
+      'Automated data wiping, documentation, and secure handover process with full compliance tracking.',
+    color: 'bg-purple-600',
+  },
+];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+const FALLBACK_CONTENT = {
+  title: 'How It Works',
+  description: 'Transform your IT equipment lifecycle in three simple steps',
+  cta_text: 'Get Started Today',
+};
 
-        // Fetch how it works steps from database
-        const stepsData = await DatabaseService.getHowItWorksSteps();
-        setSteps(stepsData);
+async function getHowItWorksData() {
+  try {
+    const [stepsData, contentRows] = await Promise.all([
+      DatabaseService.getHowItWorksSteps(),
+      DatabaseService.getSiteContent('how_it_works'),
+    ]);
 
-        // Fetch section content from database
-        const contentData =
-          await DatabaseService.getSiteContent('how_it_works');
-        const content = {};
-        contentData.forEach(item => {
-          content[item.content_key] = item.content_value;
-        });
-        setSiteContent(content);
-      } catch (error) {
-        console.error('Error fetching how it works data:', error);
-        // Fallback to default data if DB fails
-        setSteps([
-          {
-            step_number: 1,
-            title: 'Upload Inventory',
-            description:
-              'Simply upload your device inventory or integrate with existing asset management systems.',
-            color: 'bg-blue-600',
-          },
-          {
-            step_number: 2,
-            title: 'Employee Marketplace',
-            description:
-              'Employees browse available devices at discounted rates through our secure platform.',
-            color: 'bg-green-600',
-          },
-          {
-            step_number: 3,
-            title: 'Secure Transfer',
-            description:
-              'Automated data wiping, documentation, and secure handover process with full compliance tracking.',
-            color: 'bg-purple-600',
-          },
-        ]);
-        setSiteContent({
-          title: 'How It Works',
-          description:
-            'Transform your IT equipment lifecycle in three simple steps',
-          cta_text: 'Get Started Today',
-        });
-      } finally {
-        setLoading(false);
-      }
+    const content = { ...FALLBACK_CONTENT };
+    contentRows.forEach(item => {
+      content[item.content_key] = item.content_value;
+    });
+
+    return {
+      steps: stepsData?.length ? stepsData : FALLBACK_STEPS,
+      siteContent: content,
     };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-      <section
-        className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
-      >
-        {/* Background Pattern */}
-        <WavePattern darkMode={darkMode} />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="animate-pulse">
-              <div
-                className={`h-8 ${
-                  darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                } rounded w-64 mx-auto mb-4`}
-              ></div>
-              <div
-                className={`h-4 ${
-                  darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                } rounded w-96 mx-auto`}
-              ></div>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[...Array(3)].map((_, index) => (
-              <div
-                key={index}
-                className={`text-center animate-pulse ${
-                  darkMode ? 'text-gray-300' : 'text-gray-600'
-                }`}
-              >
-                <div
-                  className={`w-16 h-16 rounded-full ${
-                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  } mx-auto mb-6`}
-                ></div>
-                <div
-                  className={`h-6 ${
-                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  } rounded mb-4 w-32 mx-auto`}
-                ></div>
-                <div
-                  className={`h-4 ${
-                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  } rounded mb-2`}
-                ></div>
-                <div
-                  className={`h-4 ${
-                    darkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  } rounded w-3/4 mx-auto`}
-                ></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+  } catch (error) {
+    console.error('Error fetching how it works data:', error);
+    return { steps: FALLBACK_STEPS, siteContent: FALLBACK_CONTENT };
   }
+}
+
+const HowItWorks = async () => {
+  const { steps, siteContent } = await getHowItWorksData();
 
   return (
     <section
       id="how-it-works"
-      className={`relative py-20 overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
+      className="relative py-20 overflow-hidden bg-white dark:bg-gray-900"
     >
-      {/* Background Pattern */}
-      <WavePattern darkMode={darkMode} />
+      <WavePattern />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2
-            className={`text-3xl md:text-4xl font-bold mb-6 ${
-              darkMode ? 'text-white' : 'text-gray-900'
-            }`}
-          >
-            {siteContent.title || 'How It Works'}
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
+            {siteContent.title}
           </h2>
-          <p
-            className={`text-lg max-w-3xl mx-auto ${
-              darkMode ? 'text-gray-300' : 'text-gray-600'
-            }`}
-          >
-            {siteContent.description ||
-              'Transform your IT equipment lifecycle in three simple steps'}
+          <p className="text-lg max-w-3xl mx-auto text-gray-600 dark:text-gray-300">
+            {siteContent.description}
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step, index) => (
             <div
-              key={step.id || index}
-              className={`text-center group transition-all duration-300 hover:transform hover:-translate-y-2 ${
-                darkMode ? 'text-gray-300' : 'text-gray-600'
-              }`}
+              key={step.id}
+              className="text-center group transition-all duration-300 hover:transform hover:-translate-y-2 text-gray-600 dark:text-gray-300"
             >
-              {/* Step Number Circle */}
               <div className="relative mb-6">
                 <div
                   className={`w-16 h-16 rounded-full ${
@@ -170,22 +91,12 @@ const HowItWorks = ({ darkMode }) => {
                 >
                   {step.step_number}
                 </div>
-                {/* Connector Line - Hide on last item */}
                 {index < steps.length - 1 && (
-                  <div
-                    className={`hidden md:block absolute top-8 left-1/2 w-full h-0.5 ${
-                      darkMode ? 'bg-gray-700' : 'bg-gray-200'
-                    } transform translate-x-8`}
-                  ></div>
+                  <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-gray-200 dark:bg-gray-700 transform translate-x-8"></div>
                 )}
               </div>
 
-              {/* Step Content */}
-              <h3
-                className={`text-xl font-semibold mb-4 ${
-                  darkMode ? 'text-white' : 'text-gray-900'
-                }`}
-              >
+              <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
                 {step.title}
               </h3>
               <p className="text-base leading-relaxed">{step.description}</p>
@@ -193,23 +104,13 @@ const HowItWorks = ({ darkMode }) => {
           ))}
         </div>
 
-        {/* CTA Section */}
         <div className="text-center mt-16">
-          <button
-            onClick={() => {
-              const element = document.getElementById('benefits');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105 ${
-              darkMode
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-            } shadow-lg hover:shadow-xl`}
+          <a
+            href="#benefits"
+            className="inline-block px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl"
           >
-            {siteContent.cta_text || 'Get Started Today'}
-          </button>
+            {siteContent.cta_text}
+          </a>
         </div>
       </div>
     </section>

@@ -7,20 +7,24 @@ import NavigationList from "./components/NavigationList";
 import { useNavigation } from "./hooks/useNavigation";
 
 export default function NavigationManager({ showMessage }) {
-  const { items, loading, fetchItems, updateItems } = useNavigation();
+  const { items, loading, updateItems } = useNavigation();
   const [localItems, setLocalItems] = useState([]);
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    fetchItems();
-  }, []);
 
   useEffect(() => {
     setLocalItems(items);
   }, [items]);
 
   const addItem = () => {
-    setLocalItems([...localItems, { label: "", href: "", order_index: localItems.length }]);
+    setLocalItems([
+      ...localItems,
+      {
+        _tempId: `tmp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        label: '',
+        href: '',
+        order_index: localItems.length,
+      },
+    ]);
   };
 
   const updateItem = (index, field, value) => {

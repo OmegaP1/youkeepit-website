@@ -23,8 +23,6 @@ export default function AdminDashboard({ onLogout }) {
   const { message, showMessage, clearMessage } = useMessage();
 
   const handleLogout = async () => {
-    // Clear any stored authentication data
-    localStorage.removeItem('adminAuth');
     onLogout();
   };
 

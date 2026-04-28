@@ -1,19 +1,21 @@
-import { Inter } from 'next/font/google'
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import "./globals.css";
+// src/app/layout.js
+import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import ThemeProvider from '@/components/ThemeProvider';
+import './globals.css';
 
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
 });
 
 export const metadata = {
-  metadataBase: new URL('https://youkeepit-website.vercel.app'),
+  metadataBase: new URL('https://KeepMyKit-website.vercel.app'),
   title: {
-    default: 'YouKeepIt - Streamline IT Equipment Transitions',
-    template: '%s | YouKeepIt',
+    default: 'KeepMyKit - Streamline IT Equipment Transitions',
+    template: '%s | KeepMyKit',
   },
   description:
     'Transform how your company handles employee departures and equipment upgrades. Create value from old devices while ensuring smooth, secure transitions. Recover 60-80% of device value.',
@@ -34,10 +36,10 @@ export const metadata = {
     'IT workflows',
   ],
   authors: [
-    { name: 'YouKeepIt Team', url: 'https://youkeepit-website.vercel.app' },
+    { name: 'KeepMyKit Team', url: 'https://KeepMyKit-website.vercel.app' },
   ],
-  creator: 'YouKeepIt',
-  publisher: 'YouKeepIt',
+  creator: 'KeepMyKit',
+  publisher: 'KeepMyKit',
   formatDetection: {
     email: false,
     address: false,
@@ -46,9 +48,9 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://youkeepit-website.vercel.app',
-    siteName: 'YouKeepIt',
-    title: 'YouKeepIt - Streamline IT Equipment Transitions',
+    url: 'https://KeepMyKit-website.vercel.app',
+    siteName: 'KeepMyKit',
+    title: 'KeepMyKit - Streamline IT Equipment Transitions',
     description:
       'Transform how your company handles employee departures and equipment upgrades. Recover 60-80% of device value through our secure marketplace platform.',
     images: [
@@ -56,17 +58,17 @@ export const metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'YouKeepIt - IT Equipment Management Platform',
+        alt: 'KeepMyKit - IT Equipment Management Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'YouKeepIt - Streamline IT Equipment Transitions',
+    title: 'KeepMyKit - Streamline IT Equipment Transitions',
     description:
       'Transform how your company handles employee departures and equipment upgrades. Recover 60-80% of device value.',
     images: ['/og-image.jpg'],
-    creator: '@youkeepit',
+    creator: '@KeepMyKit',
   },
   robots: {
     index: true,
@@ -96,51 +98,51 @@ export const metadata = {
     yahoo: 'your-yahoo-verification-code',
   },
   alternates: {
-    canonical: 'https://youkeepit-website.vercel.app',
+    canonical: 'https://KeepMyKit-website.vercel.app',
   },
   category: 'technology',
 };
 
 // Structured Data for SEO
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "YouKeepIt",
-  description: "IT Equipment Transition Management Platform",
-  url: "https://youkeepit-website.vercel.app",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'KeepMyKit',
+  description: 'IT Equipment Transition Management Platform',
+  url: 'https://KeepMyKit-website.vercel.app',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
   offers: {
-    "@type": "Offer",
-    price: "2999",
-    priceCurrency: "USD",
-    priceValidUntil: "2025-12-31",
-    availability: "https://schema.org/InStock",
+    '@type': 'Offer',
+    price: '2999',
+    priceCurrency: 'USD',
+    priceValidUntil: '2025-12-31',
+    availability: 'https://schema.org/InStock',
   },
   provider: {
-    "@type": "Organization",
-    name: "YouKeepIt",
-    url: "https://youkeepit-website.vercel.app",
-    logo: "https://youkeepit-website.vercel.app/favicon.svg",
+    '@type': 'Organization',
+    name: 'KeepMyKit',
+    url: 'https://KeepMyKit-website.vercel.app',
+    logo: 'https://KeepMyKit-website.vercel.app/favicon.svg',
     contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "Customer Service",
-      email: "support@youkeepit.com",
+      '@type': 'ContactPoint',
+      contactType: 'Customer Service',
+      email: 'support@KeepMyKit.com',
     },
   },
   featureList: [
-    "Enterprise Security",
-    "Employee Portal",
-    "Analytics Dashboard",
-    "Automated Workflows",
-    "Integration Ready",
-    "White-Label Option",
+    'Enterprise Security',
+    'Employee Portal',
+    'Analytics Dashboard',
+    'Automated Workflows',
+    'Integration Ready',
+    'White-Label Option',
   ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -155,11 +157,10 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#3b82f6" />
         <meta name="color-scheme" content="light dark" />
       </head>
-      <body
-        className={`${inter.className} antialiased`}
-        suppressHydrationWarning
-      >
-        <div id="root">{children}</div>
+      <body className={`${inter.className} antialiased`}>
+        <ThemeProvider>
+          <div id="root">{children}</div>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

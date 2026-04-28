@@ -1,9 +1,14 @@
 // src/components/backgrounds/CodeMatrix.js
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useTheme } from 'next-themes'
 
-const CodeMatrix = ({ darkMode }) => {
+const CodeMatrix = () => {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const darkMode = mounted && resolvedTheme === 'dark'
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Base Tech Gradient */}

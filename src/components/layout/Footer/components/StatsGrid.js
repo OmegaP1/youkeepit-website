@@ -27,8 +27,8 @@ const StatsGrid = ({ darkMode }) => {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      {stats.map((stat, index) => (
-        <div key={index} className="text-center group">
+      {stats.map((stat) => (
+        <div key={stat.label} className="text-center group">
           <div
             className={`backdrop-blur-sm border rounded-xl p-4 transition-all duration-300 group-hover:scale-105 ${
               darkMode

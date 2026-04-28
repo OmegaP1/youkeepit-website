@@ -1,14 +1,14 @@
 // src/app/admin/components/testimonials/hooks/useTestimonials.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
 export function useTestimonials() {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchTestimonials = async () => {
+  const fetchTestimonials = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -25,7 +25,11 @@ export function useTestimonials() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, [fetchTestimonials]);
 
   const createTestimonial = async (testimonialData) => {
     try {

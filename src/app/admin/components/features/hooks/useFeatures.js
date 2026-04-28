@@ -1,14 +1,14 @@
 // src/app/admin/components/features/hooks/useFeatures.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
 export function useFeatures() {
   const [features, setFeatures] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchFeatures = async () => {
+  const fetchFeatures = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -25,7 +25,11 @@ export function useFeatures() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchFeatures();
+  }, [fetchFeatures]);
 
   const createFeature = async (featureData) => {
     try {

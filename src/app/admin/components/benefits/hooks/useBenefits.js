@@ -1,7 +1,7 @@
 // src/app/admin/components/benefits/hooks/useBenefits.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DatabaseService } from "@/services/database";
 
 export function useBenefits() {
@@ -9,10 +9,9 @@ export function useBenefits() {
   const [benefits, setBenefits] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchBenefitsData = async () => {
+  const fetchBenefitsData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch benefits content
       const contentData = await DatabaseService.getSiteContent('benefits');
       const content = {};
       contentData.forEach(item => {
@@ -20,7 +19,6 @@ export function useBenefits() {
       });
       setBenefitsContent(content);
 
-      // Fetch benefits
       const benefitsData = await DatabaseService.getBenefits();
       setBenefits(benefitsData);
     } catch (error) {
@@ -28,7 +26,11 @@ export function useBenefits() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchBenefitsData();
+  }, [fetchBenefitsData]);
 
   const updateBenefitsContent = async (contentData) => {
     try {

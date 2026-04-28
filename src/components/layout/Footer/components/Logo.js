@@ -44,7 +44,7 @@ const Logo = ({ darkMode }) => {
             darkMode ? 'text-white' : 'text-gray-900'
           }`}
         >
-          YouKeepIt
+          KeepMyKit
           {darkMode && <span className="ml-1 text-blue-400 text-lg">✦</span>}
         </h3>
         <p

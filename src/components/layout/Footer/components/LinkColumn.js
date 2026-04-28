@@ -16,8 +16,8 @@ const LinkColumn = ({ title, icon, links, darkMode }) => {
       
       {/* Links List */}
       <ul className="space-y-3">
-        {links.map((link, index) => (
-          <li key={index}>
+        {links.map((link) => (
+          <li key={link.href ?? link.label}>
             <a 
               href={link.href} 
               className={`group flex items-center justify-between transition-all duration-300 hover:translate-x-1 ${
