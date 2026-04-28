@@ -4,30 +4,15 @@
 import { useState, useEffect } from "react";
 import SecureAdminLogin from '@/components/admin/SecureAdminLogin';
 import AdminDashboard from '@/components/admin/AdminDashboard';
-import { AuthStore } from '@/services/auth.service';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check authentication status on component mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Check if we have user data in localStorage
-        const storedUser = AuthStore.getUser();
-
-        if (!storedUser || AuthStore.isSessionExpired()) {
-          // Clear any stale data
-          AuthStore.clearAuth();
-          setIsAuthenticated(false);
-          setUser(null);
-          setLoading(false);
-          return;
-        }
-
-        // Validate session with server
         const response = await fetch('/api/auth/validate', {
           method: 'GET',
           credentials: 'include',
@@ -35,27 +20,19 @@ export default function AdminPage() {
 
         if (response.ok) {
           const data = await response.json();
-          if (data.valid) {
+          if (data.success) {
             setIsAuthenticated(true);
             setUser(data.user);
-            // Update localStorage with fresh data
-            localStorage.setItem('admin_user', JSON.stringify(data.user));
-            localStorage.setItem('admin_expires', data.expiresAt);
           } else {
-            // Session is invalid, clear local storage
-            AuthStore.clearAuth();
             setIsAuthenticated(false);
             setUser(null);
           }
         } else {
-          // Session validation failed
-          AuthStore.clearAuth();
           setIsAuthenticated(false);
           setUser(null);
         }
       } catch (error) {
         console.error('Auth check error:', error);
-        AuthStore.clearAuth();
         setIsAuthenticated(false);
         setUser(null);
       } finally {
@@ -73,7 +50,6 @@ export default function AdminPage() {
 
   const handleLogout = async () => {
     try {
-      // Call logout API to invalidate server session
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
@@ -81,8 +57,6 @@ export default function AdminPage() {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      // Clear local storage regardless of API call success
-      AuthStore.clearAuth();
       setIsAuthenticated(false);
       setUser(null);
     }

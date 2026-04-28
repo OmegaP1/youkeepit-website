@@ -74,36 +74,3 @@ export class AuthService {
   }
 }
 
-// Auth storage helper for client-side state management
-export class AuthStore {
-  static saveAuth(user, expiresAt) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_user', JSON.stringify(user));
-      localStorage.setItem('admin_expires', expiresAt);
-    }
-  }
-
-  static getUser() {
-    if (typeof window !== 'undefined') {
-      const user = localStorage.getItem('admin_user');
-      return user ? JSON.parse(user) : null;
-    }
-    return null;
-  }
-
-  static clearAuth() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('admin_user');
-      localStorage.removeItem('admin_expires');
-    }
-  }
-
-  static isSessionExpired() {
-    if (typeof window !== 'undefined') {
-      const expiresAt = localStorage.getItem('admin_expires');
-      if (!expiresAt) return true;
-      return new Date() > new Date(expiresAt);
-    }
-    return true;
-  }
-}

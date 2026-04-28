@@ -2,6 +2,7 @@
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import ThemeProvider from '@/components/ThemeProvider';
 import './globals.css';
 
 const inter = Inter({
@@ -141,7 +142,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -156,11 +157,10 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#3b82f6" />
         <meta name="color-scheme" content="light dark" />
       </head>
-      <body
-        className={`${inter.className} antialiased`}
-        suppressHydrationWarning={true}
-      >
-        <div id="root">{children}</div>
+      <body className={`${inter.className} antialiased`}>
+        <ThemeProvider>
+          <div id="root">{children}</div>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

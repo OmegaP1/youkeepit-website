@@ -1,21 +1,14 @@
 // src/app/api/company/auth/login/route.js
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createAdminClient } from '@/lib/supabase';
 
-// Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
-
 export async function POST(request) {
+  const supabaseAdmin = createAdminClient();
   try {
     const body = await request.json();
     const { email, password } = body;
-
-    console.log('Login attempt for:', email); // Debug log
 
     if (!email || !password) {
       return NextResponse.json(
@@ -24,13 +17,10 @@ export async function POST(request) {
       );
     }
 
-    // Call authenticate_company_user function
     const { data, error } = await supabaseAdmin.rpc('authenticate_company_user', {
       p_email: email.trim().toLowerCase(),
       p_password: password,
     });
-
-    console.log('Supabase RPC response:', { data, error }); // Debug log
 
     if (error) {
       console.error('Supabase RPC error:', error);
@@ -40,19 +30,12 @@ export async function POST(request) {
       );
     }
 
-    // The data is already a JSON object, no need to parse
     const result = data;
 
-    console.log('Parsed result:', result); // Debug log
-
     if (result && result.success) {
-      // Generate session token
       const sessionToken = crypto.randomUUID() + '-' + Date.now();
-      const expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000); // 8 hours
+      const expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000);
 
-      console.log('Creating session with token:', sessionToken); // Debug log
-
-      // Create session in database
       const { error: sessionError } = await supabaseAdmin
         .from('company_user_sessions')
         .insert({
@@ -72,9 +55,6 @@ export async function POST(request) {
         );
       }
 
-      console.log('Session created successfully'); // Debug log
-
-      // Log activity (optional - skip if it fails)
       try {
         await supabaseAdmin.rpc('log_activity', {
           p_company_id: result.user.company_id,
@@ -86,18 +66,12 @@ export async function POST(request) {
         });
       } catch (logError) {
         console.warn('Activity logging failed:', logError);
-        // Don't fail login if activity logging fails
       }
 
-      console.log('Login successful for:', result.user.email); // Debug log
-
-      // Set cookie with broader path and less restrictive settings for debugging
       const cookieSettings =
         process.env.NODE_ENV === 'development'
           ? `company_session=${sessionToken}; HttpOnly; SameSite=Lax; Max-Age=${8 * 60 * 60}; Path=/`
           : `company_session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${8 * 60 * 60}; Path=/`;
-
-      console.log('Setting cookie:', cookieSettings); // Debug log
 
       return NextResponse.json(
         {
@@ -114,7 +88,6 @@ export async function POST(request) {
         }
       );
     } else {
-      console.log('Authentication failed:', result?.message || 'Unknown error'); // Debug log
       return NextResponse.json(
         { success: false, message: result?.message || 'Invalid credentials' },
         { status: 401 }

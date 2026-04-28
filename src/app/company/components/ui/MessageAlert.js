@@ -1,35 +1,32 @@
 // src/app/company/components/ui/MessageAlert.js
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 
 export default function MessageAlert({ message, onClose, autoClose = true }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
 
-  useEffect(() => {
-    if (message) {
-      setIsVisible(true);
-      setIsExiting(false);
-
-      if (autoClose) {
-        const timer = setTimeout(() => {
-          handleClose();
-        }, 5000);
-
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [message, autoClose]);
-
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
       setIsVisible(false);
       if (onClose) onClose();
     }, 300);
-  };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!message) return;
+
+    setIsVisible(true);
+    setIsExiting(false);
+
+    if (!autoClose) return;
+
+    const timer = setTimeout(handleClose, 5000);
+    return () => clearTimeout(timer);
+  }, [message, autoClose, handleClose]);
 
   if (!message || !isVisible) return null;
 

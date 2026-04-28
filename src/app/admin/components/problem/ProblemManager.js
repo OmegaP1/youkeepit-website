@@ -1,7 +1,7 @@
 // src/app/admin/components/problem/ProblemManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AlertTriangle, Plus } from "lucide-react";
 import ProblemForm from "./components/ProblemForm";
 import ProblemStatsList from "./components/ProblemStatsList";
@@ -9,23 +9,18 @@ import ProblemStatForm from "./components/ProblemStatForm";
 import { useProblem } from "./hooks/useProblem";
 
 export default function ProblemManager({ showMessage }) {
-  const { 
-    problemContent, 
-    problemStats, 
-    loading, 
-    fetchProblemData, 
-    updateProblemContent, 
-    createProblemStat, 
-    updateProblemStat, 
-    deleteProblemStat 
+  const {
+    problemContent,
+    problemStats,
+    loading,
+    updateProblemContent,
+    createProblemStat,
+    updateProblemStat,
+    deleteProblemStat
   } = useProblem();
-  
+
   const [showAddStatForm, setShowAddStatForm] = useState(false);
   const [editingStat, setEditingStat] = useState(null);
-
-  useEffect(() => {
-    fetchProblemData();
-  }, []);
 
   const handleUpdateContent = async (contentData) => {
     const success = await updateProblemContent(contentData);

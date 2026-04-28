@@ -1,7 +1,7 @@
 // src/app/admin/components/howitworks/hooks/useHowItWorks.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DatabaseService } from "@/services/database";
 
 export function useHowItWorks() {
@@ -9,10 +9,9 @@ export function useHowItWorks() {
   const [steps, setSteps] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchHowItWorksData = async () => {
+  const fetchHowItWorksData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch how it works content
       const contentData = await DatabaseService.getSiteContent('how_it_works');
       const content = {};
       contentData.forEach(item => {
@@ -20,7 +19,6 @@ export function useHowItWorks() {
       });
       setHowItWorksContent(content);
 
-      // Fetch how it works steps
       const stepsData = await DatabaseService.getHowItWorksSteps();
       setSteps(stepsData);
     } catch (error) {
@@ -28,7 +26,11 @@ export function useHowItWorks() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchHowItWorksData();
+  }, [fetchHowItWorksData]);
 
   const updateHowItWorksContent = async (contentData) => {
     try {

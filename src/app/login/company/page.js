@@ -339,55 +339,56 @@ export default function CompanyLoginPage() {
             </p>
           </div>
 
-          {/* Demo Credentials */}
-          <div
-            className={`mt-6 p-4 rounded-2xl ${
-              darkMode ? 'bg-gray-800/50' : 'bg-white/80'
-            } backdrop-blur-xl border ${
-              darkMode ? 'border-gray-700' : 'border-gray-200'
-            }`}
-          >
-            <h3
-              className={`text-sm font-semibold mb-3 flex items-center ${
-                darkMode ? 'text-gray-200' : 'text-gray-800'
+          {process.env.NODE_ENV !== 'production' && (
+            <div
+              className={`mt-6 p-4 rounded-2xl ${
+                darkMode ? 'bg-gray-800/50' : 'bg-white/80'
+              } backdrop-blur-xl border ${
+                darkMode ? 'border-gray-700' : 'border-gray-200'
               }`}
             >
-              <Users className="w-4 h-4 mr-2 text-blue-500" />
-              Demo Credentials
-            </h3>
-            <div className="space-y-2 text-xs">
-              <div
-                className={`p-2 rounded-lg ${
-                  darkMode ? 'bg-gray-700' : 'bg-gray-50'
+              <h3
+                className={`text-sm font-semibold mb-3 flex items-center ${
+                  darkMode ? 'text-gray-200' : 'text-gray-800'
                 }`}
               >
-                <p className="font-medium text-blue-600">Acme Corporation</p>
-                <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                  admin@acme-corp.com / admin123
-                </p>
-              </div>
-              <div
-                className={`p-2 rounded-lg ${
-                  darkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}
-              >
-                <p className="font-medium text-purple-600">TechStart Inc</p>
-                <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                  admin@techstart.io / techstart123
-                </p>
-              </div>
-              <div
-                className={`p-2 rounded-lg ${
-                  darkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}
-              >
-                <p className="font-medium text-green-600">Global Solutions</p>
-                <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                  admin@globalsolutions.com / global123
-                </p>
+                <Users className="w-4 h-4 mr-2 text-blue-500" />
+                Demo Credentials (dev only)
+              </h3>
+              <div className="space-y-2 text-xs">
+                <div
+                  className={`p-2 rounded-lg ${
+                    darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                  }`}
+                >
+                  <p className="font-medium text-blue-600">Acme Corporation</p>
+                  <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                    admin@acme-corp.com / admin123
+                  </p>
+                </div>
+                <div
+                  className={`p-2 rounded-lg ${
+                    darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                  }`}
+                >
+                  <p className="font-medium text-purple-600">TechStart Inc</p>
+                  <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                    admin@techstart.io / techstart123
+                  </p>
+                </div>
+                <div
+                  className={`p-2 rounded-lg ${
+                    darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                  }`}
+                >
+                  <p className="font-medium text-green-600">Global Solutions</p>
+                  <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                    admin@globalsolutions.com / global123
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Security Features */}
           <div className="mt-6 grid grid-cols-3 gap-4">
@@ -395,9 +396,9 @@ export default function CompanyLoginPage() {
               { icon: Shield, label: 'Secure Login' },
               { icon: Lock, label: 'Encrypted Data' },
               { icon: CheckCircle, label: 'Verified Access' },
-            ].map((feature, index) => (
+            ].map((feature) => (
               <div
-                key={index}
+                key={feature.label}
                 className={`text-center p-3 rounded-xl ${
                   darkMode ? 'bg-gray-800/30' : 'bg-white/60'
                 } backdrop-blur-sm border ${

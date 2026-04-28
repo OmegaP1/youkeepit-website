@@ -1,7 +1,7 @@
 // src/app/admin/components/howitworks/HowItWorksManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Settings, Plus } from "lucide-react";
 import HowItWorksForm from "./components/HowItWorksForm";
 import StepsList from "./components/StepsList";
@@ -9,23 +9,18 @@ import StepForm from "./components/StepForm";
 import { useHowItWorks } from "./hooks/useHowItWorks";
 
 export default function HowItWorksManager({ showMessage }) {
-  const { 
-    howItWorksContent, 
-    steps, 
-    loading, 
-    fetchHowItWorksData, 
-    updateHowItWorksContent, 
-    createStep, 
-    updateStep, 
-    deleteStep 
+  const {
+    howItWorksContent,
+    steps,
+    loading,
+    updateHowItWorksContent,
+    createStep,
+    updateStep,
+    deleteStep
   } = useHowItWorks();
-  
+
   const [showAddStepForm, setShowAddStepForm] = useState(false);
   const [editingStep, setEditingStep] = useState(null);
-
-  useEffect(() => {
-    fetchHowItWorksData();
-  }, []);
 
   const handleUpdateContent = async (contentData) => {
     const success = await updateHowItWorksContent(contentData);

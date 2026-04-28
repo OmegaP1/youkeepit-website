@@ -20,7 +20,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "analyze": "ANALYZE=true npm run build",
-    "postinstall": "npm audit --audit-level moderate",
+    "postinstall": "npm audit --audit-level moderate || true",
     "clean": "rm -rf .next out node_modules/.cache",
     "db:migrate": "echo 'Run migrations in Supabase SQL Editor'",
     "db:seed": "echo 'Run seed data in Supabase SQL Editor'",

@@ -171,7 +171,7 @@ export default function PricingPlanForm({ plan, onSubmit, onCancel }) {
             <div className="space-y-2">
               {formData.features.map((feature, index) => (
                 <div
-                  key={index}
+                  key={`${feature}-${index}`}
                   className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded"
                 >
                   <span className="text-sm">{feature}</span>

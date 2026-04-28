@@ -1,9 +1,14 @@
 // src/components/backgrounds/CircuitPattern.js
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useTheme } from 'next-themes'
 
-const CircuitPattern = ({ darkMode }) => {
+const CircuitPattern = () => {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const darkMode = mounted && resolvedTheme === 'dark'
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Base Tech Gradient */}

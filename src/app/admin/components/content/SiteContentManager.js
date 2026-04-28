@@ -1,16 +1,11 @@
 // src/app/admin/components/content/SiteContentManager.js
 "use client";
 
-import { useState, useEffect } from "react";
 import ContentSection from "./components/ContentSection";
 import { useSiteContent } from "./hooks/useSiteContent";
 
 export default function SiteContentManager({ showMessage }) {
   const { content, loading, fetchContent } = useSiteContent();
-
-  useEffect(() => {
-    fetchContent();
-  }, []);
 
   const groupedContent = content.reduce((acc, item) => {
     if (!acc[item.section_name]) {

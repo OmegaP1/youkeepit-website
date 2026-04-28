@@ -51,7 +51,7 @@ export default function NavigationList({ items, onUpdateItem, onRemoveItem }) {
         <div className="space-y-4">
           {items.map((item, index) => (
             <NavigationItem
-              key={index}
+              key={item.id ?? item._tempId ?? `idx-${index}`}
               item={item}
               index={index}
               onUpdate={onUpdateItem}

@@ -1,12 +1,18 @@
 // src/lib/services/companyService.js
-import { createClient } from '@supabase/supabase-js';
+import { createAdminClient } from '@/lib/supabase';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+let _admin = null;
+const supabaseAdmin = new Proxy(
+  {},
+  {
+    get(_target, prop) {
+      if (!_admin) _admin = createAdminClient();
+      const value = _admin[prop];
+      return typeof value === 'function' ? value.bind(_admin) : value;
+    },
+  }
 );
 
-// Company Service Class
 export class CompanyService {
   
   // ============================================

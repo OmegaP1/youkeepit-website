@@ -1,7 +1,7 @@
 // src/app/company/components/reports/ReportsManager.js
 'use client';
 
-import { BarChart3, Download, TrendingUp } from 'lucide-react';
+import { BarChart3, Download, TrendingUp, Users } from 'lucide-react';
 
 export default function ReportsManager({ showMessage }) {
   return (

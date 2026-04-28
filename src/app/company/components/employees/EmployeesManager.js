@@ -23,6 +23,71 @@ import EmployeeTable from './EmployeeTable';
 import EmployeeForm from './EmployeeForm';
 import EmployeeDetails from './EmployeeDetails';
 
+const MOCK_EMPLOYEES = [
+  {
+    id: 1,
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@company.com',
+    phone: '+1 (555) 123-4567',
+    department: 'Engineering',
+    position: 'Senior Developer',
+    status: 'Active',
+    startDate: '2023-01-15',
+    location: 'New York, NY',
+    manager: 'Sarah Wilson',
+    deviceCount: 2,
+    avatar: null,
+  },
+  {
+    id: 2,
+    firstName: 'Jane',
+    lastName: 'Smith',
+    email: 'jane.smith@company.com',
+    phone: '+1 (555) 987-6543',
+    department: 'Marketing',
+    position: 'Marketing Manager',
+    status: 'Active',
+    startDate: '2022-08-20',
+    location: 'Los Angeles, CA',
+    manager: 'Mike Johnson',
+    deviceCount: 1,
+    avatar: null,
+  },
+  {
+    id: 3,
+    firstName: 'Michael',
+    lastName: 'Johnson',
+    email: 'michael.johnson@company.com',
+    phone: '+1 (555) 456-7890',
+    department: 'Sales',
+    position: 'Sales Director',
+    status: 'Active',
+    startDate: '2021-03-10',
+    location: 'Chicago, IL',
+    manager: 'CEO',
+    deviceCount: 3,
+    avatar: null,
+  },
+  {
+    id: 4,
+    firstName: 'Emily',
+    lastName: 'Davis',
+    email: 'emily.davis@company.com',
+    phone: '+1 (555) 321-0987',
+    department: 'HR',
+    position: 'HR Specialist',
+    status: 'Inactive',
+    startDate: '2023-06-01',
+    location: 'Remote',
+    manager: 'Linda Brown',
+    deviceCount: 0,
+    avatar: null,
+  },
+];
+
+const DEPARTMENTS = [...new Set(MOCK_EMPLOYEES.map(emp => emp.department))];
+
 export default function EmployeesManager({ showMessage }) {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
@@ -35,80 +100,15 @@ export default function EmployeesManager({ showMessage }) {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
 
-  // Mock employee data - replace with API call
-  const mockEmployees = [
-    {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@company.com',
-      phone: '+1 (555) 123-4567',
-      department: 'Engineering',
-      position: 'Senior Developer',
-      status: 'Active',
-      startDate: '2023-01-15',
-      location: 'New York, NY',
-      manager: 'Sarah Wilson',
-      deviceCount: 2,
-      avatar: null,
-    },
-    {
-      id: 2,
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane.smith@company.com',
-      phone: '+1 (555) 987-6543',
-      department: 'Marketing',
-      position: 'Marketing Manager',
-      status: 'Active',
-      startDate: '2022-08-20',
-      location: 'Los Angeles, CA',
-      manager: 'Mike Johnson',
-      deviceCount: 1,
-      avatar: null,
-    },
-    {
-      id: 3,
-      firstName: 'Michael',
-      lastName: 'Johnson',
-      email: 'michael.johnson@company.com',
-      phone: '+1 (555) 456-7890',
-      department: 'Sales',
-      position: 'Sales Director',
-      status: 'Active',
-      startDate: '2021-03-10',
-      location: 'Chicago, IL',
-      manager: 'CEO',
-      deviceCount: 3,
-      avatar: null,
-    },
-    {
-      id: 4,
-      firstName: 'Emily',
-      lastName: 'Davis',
-      email: 'emily.davis@company.com',
-      phone: '+1 (555) 321-0987',
-      department: 'HR',
-      position: 'HR Specialist',
-      status: 'Inactive',
-      startDate: '2023-06-01',
-      location: 'Remote',
-      manager: 'Linda Brown',
-      deviceCount: 0,
-      avatar: null,
-    },
-  ];
-
-  // Get unique departments for filter
-  const departments = [...new Set(mockEmployees.map(emp => emp.department))];
+  const departments = DEPARTMENTS;
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setEmployees(mockEmployees);
-      setFilteredEmployees(mockEmployees);
+    const timer = setTimeout(() => {
+      setEmployees(MOCK_EMPLOYEES);
+      setFilteredEmployees(MOCK_EMPLOYEES);
       setLoading(false);
     }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   // Filter employees based on search and filters

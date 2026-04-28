@@ -1,20 +1,16 @@
 // src/app/admin/components/faq/FAQManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import FAQList from "./components/FAQList";
 import FAQForm from "./components/FAQForm";
 import { useFAQ } from "./hooks/useFAQ";
 
 export default function FAQManager({ showMessage }) {
-  const { items, loading, fetchItems, createItem, updateItem, deleteItem } = useFAQ();
+  const { items, loading, createItem, updateItem, deleteItem } = useFAQ();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-
-  useEffect(() => {
-    fetchItems();
-  }, []);
 
   const handleCreate = async (itemData) => {
     const success = await createItem(itemData);

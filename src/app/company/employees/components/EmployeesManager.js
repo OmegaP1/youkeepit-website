@@ -1,7 +1,7 @@
 // src/app/company/components/employees/EmployeesManager.js
 'use client';
 
-import { Users, Plus, Search, UserPlus } from 'lucide-react';
+import { Users, Plus, Search, UserPlus, TrendingUp } from 'lucide-react';
 
 export default function EmployeesManager({ showMessage }) {
   return (

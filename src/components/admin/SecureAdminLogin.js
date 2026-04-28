@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Eye, EyeOff, Lock, User, Shield, AlertTriangle } from 'lucide-react';
-import { AuthService, AuthStore } from '@/services/auth.service';
+import { AuthService } from '@/services/auth.service';
 
 const SecureAdminLogin = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({
@@ -45,11 +45,6 @@ const SecureAdminLogin = ({ onLogin }) => {
 
       if (result.success) {
         setAttempts(0);
-
-        // Save user data to localStorage
-        AuthStore.saveAuth(result.user, result.expiresAt);
-
-        // Call parent login handler
         onLogin(true, result.user);
       } else {
         setAttempts(prev => prev + 1);
@@ -133,7 +128,7 @@ const SecureAdminLogin = ({ onLogin }) => {
                 type="text"
                 value={credentials.username}
                 onChange={e => handleInputChange('username', e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
+                className="w-full pl-10 pr-4 py-3 bg-white text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                 placeholder="Enter your username"
                 required
                 disabled={loading || isBlocked}
@@ -153,7 +148,7 @@ const SecureAdminLogin = ({ onLogin }) => {
                 type={showPassword ? 'text' : 'password'}
                 value={credentials.password}
                 onChange={e => handleInputChange('password', e.target.value)}
-                className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
+                className="w-full pl-10 pr-12 py-3 bg-white text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                 placeholder="Enter your password"
                 required
                 disabled={loading || isBlocked}

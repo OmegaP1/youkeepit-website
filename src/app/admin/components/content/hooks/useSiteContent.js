@@ -1,14 +1,14 @@
 // src/app/admin/components/content/hooks/useSiteContent.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
 export function useSiteContent() {
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchContent = async () => {
+  const fetchContent = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -24,7 +24,11 @@ export function useSiteContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchContent();
+  }, [fetchContent]);
 
   const updateContent = async (id, updates) => {
     try {

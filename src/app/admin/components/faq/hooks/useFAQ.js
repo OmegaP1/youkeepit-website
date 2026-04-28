@@ -1,14 +1,14 @@
 // src/app/admin/components/faq/hooks/useFAQ.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
 export function useFAQ() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -25,7 +25,11 @@ export function useFAQ() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
   const createItem = async (itemData) => {
     try {

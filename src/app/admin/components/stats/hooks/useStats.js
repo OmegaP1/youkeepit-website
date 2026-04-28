@@ -1,14 +1,14 @@
 // src/app/admin/components/stats/hooks/useStats.js
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
 export function useStats() {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -25,7 +25,11 @@ export function useStats() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const createStat = async (statData) => {
     try {

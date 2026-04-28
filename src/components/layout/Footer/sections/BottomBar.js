@@ -59,9 +59,9 @@ const BottomBar = ({ darkMode }) => {
 
         {/* Legal Links */}
         <div className="flex flex-wrap items-center gap-6">
-          {legalLinks.map((link, index) => (
+          {legalLinks.map((link) => (
             <a
-              key={index}
+              key={link.href ?? link.label}
               href={link.href}
               className={`text-sm transition-all duration-300 hover:underline ${
                 darkMode

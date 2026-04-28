@@ -1,7 +1,7 @@
 // src/app/admin/components/benefits/BenefitsManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Award, Plus } from "lucide-react";
 import BenefitsForm from "./components/BenefitsForm";
 import BenefitsList from "./components/BenefitsList";
@@ -9,23 +9,18 @@ import BenefitForm from "./components/BenefitForm";
 import { useBenefits } from "./hooks/useBenefits";
 
 export default function BenefitsManager({ showMessage }) {
-  const { 
-    benefitsContent, 
-    benefits, 
-    loading, 
-    fetchBenefitsData, 
-    updateBenefitsContent, 
-    createBenefit, 
-    updateBenefit, 
-    deleteBenefit 
+  const {
+    benefitsContent,
+    benefits,
+    loading,
+    updateBenefitsContent,
+    createBenefit,
+    updateBenefit,
+    deleteBenefit
   } = useBenefits();
-  
+
   const [showAddBenefitForm, setShowAddBenefitForm] = useState(false);
   const [editingBenefit, setEditingBenefit] = useState(null);
-
-  useEffect(() => {
-    fetchBenefitsData();
-  }, []);
 
   const handleUpdateContent = async (contentData) => {
     const success = await updateBenefitsContent(contentData);

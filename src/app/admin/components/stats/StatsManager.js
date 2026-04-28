@@ -1,20 +1,16 @@
 // src/app/admin/components/stats/StatsManager.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import StatsList from "./components/StatsList";
 import StatForm from "./components/StatForm";
 import { useStats } from "./hooks/useStats";
 
 export default function StatsManager({ showMessage }) {
-  const { stats, loading, fetchStats, createStat, updateStat, deleteStat } = useStats();
+  const { stats, loading, createStat, updateStat, deleteStat } = useStats();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingStat, setEditingStat] = useState(null);
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
 
   const handleCreate = async (statData) => {
     const success = await createStat(statData);

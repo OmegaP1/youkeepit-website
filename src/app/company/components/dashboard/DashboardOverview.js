@@ -239,8 +239,8 @@ export default function DashboardOverview({ showMessage, onTabChange }) {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <StatCard key={index} {...stat} />
+        {stats.map(stat => (
+          <StatCard key={stat.title} {...stat} />
         ))}
       </div>
 
@@ -259,9 +259,9 @@ export default function DashboardOverview({ showMessage, onTabChange }) {
               </button>
             </div>
             <div className="space-y-4">
-              {recentOffers.map((offer, index) => (
+              {recentOffers.map(offer => (
                 <div
-                  key={index}
+                  key={offer.id}
                   className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-center space-x-4">
@@ -314,9 +314,10 @@ export default function DashboardOverview({ showMessage, onTabChange }) {
               Quick Actions
             </h3>
             <div className="space-y-3">
-              {quickActions.map((action, index) => (
+              {quickActions.map(action => (
                 <button
-                  key={index}
+                  key={action.title}
+                  type="button"
                   onClick={action.action}
                   className="w-full p-4 rounded-xl border border-gray-200 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-200 text-left group"
                 >

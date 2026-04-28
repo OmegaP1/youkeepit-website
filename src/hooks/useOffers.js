@@ -3,45 +3,47 @@
 
 import { useState, useEffect } from 'react';
 
+const MOCK_OFFERS = [
+  {
+    id: 'OFF-001',
+    employeeName: 'John Smith',
+    employeeEmail: 'john.smith@company.com',
+    deviceBrand: 'Apple',
+    deviceModel: 'MacBook Pro 16" 2022',
+    serialNumber: 'ABCD1234567890',
+    price: 850,
+    status: 'pending_wipe',
+    createdAt: '2024-06-19T10:30:00Z',
+    expiresAt: '2024-06-26T10:30:00Z',
+    offerLink: 'https://offer.keepmykit.com/off-001',
+    username: 'john_smith_001',
+    password: 'temp_pass_001',
+  },
+];
+
 export function useOffers() {
   const [offers, setOffers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Mock data - replace with actual API calls
-  const mockOffers = [
-    {
-      id: 'OFF-001',
-      employeeName: 'John Smith',
-      employeeEmail: 'john.smith@company.com',
-      deviceBrand: 'Apple',
-      deviceModel: 'MacBook Pro 16" 2022',
-      serialNumber: 'ABCD1234567890',
-      price: 850,
-      status: 'pending_wipe',
-      createdAt: '2024-06-19T10:30:00Z',
-      expiresAt: '2024-06-26T10:30:00Z',
-      offerLink: 'https://offer.keepmykit.com/off-001',
-      username: 'john_smith_001',
-      password: 'temp_pass_001',
-    },
-  ];
-
   useEffect(() => {
+    let cancelled = false;
     const fetchOffers = async () => {
       try {
         setIsLoading(true);
-        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
-        setOffers(mockOffers);
+        if (!cancelled) setOffers(MOCK_OFFERS);
       } catch (err) {
-        setError('Failed to fetch offers');
+        if (!cancelled) setError('Failed to fetch offers');
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     fetchOffers();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const createOffer = async offerData => {

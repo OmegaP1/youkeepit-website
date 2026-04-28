@@ -4,7 +4,7 @@
 import { X } from "lucide-react";
 
 export default function MessageAlert({ message, onClose }) {
-  if (!message.text) return null;
+  if (!message?.text) return null;
 
   return (
     <div

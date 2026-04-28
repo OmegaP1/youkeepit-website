@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import {
   User,
   Mail,
@@ -109,9 +110,12 @@ export default function ProfileSettings({ showMessage }) {
         <div className="relative">
           <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
             {profileData.avatar ? (
-              <img 
-                src={profileData.avatar} 
-                alt="Profile" 
+              <Image
+                src={profileData.avatar}
+                alt="Profile"
+                width={96}
+                height={96}
+                unoptimized
                 className="w-24 h-24 rounded-full object-cover"
               />
             ) : (
@@ -405,8 +409,8 @@ export default function ProfileSettings({ showMessage }) {
             { date: '2025-06-19 10:30 AM', location: 'San Francisco, CA', device: 'Chrome on Windows' },
             { date: '2025-06-18 02:15 PM', location: 'San Francisco, CA', device: 'Safari on iPhone' },
             { date: '2025-06-17 09:45 AM', location: 'San Francisco, CA', device: 'Chrome on Windows' }
-          ].map((login, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          ].map((login) => (
+            <div key={login.date} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div>
                 <p className="font-medium text-gray-900">{login.device}</p>
                 <p className="text-sm text-gray-600">{login.location} • {login.date}</p>
