@@ -1,4 +1,3 @@
-// .gitignore
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -35,9 +34,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-# typescript
+# typescript build artifacts
 *.tsbuildinfo
-next-env.d.ts
+# next-env.d.ts is intentionally tracked so CI can run `tsc --noEmit`
+# without first running `next build` (which is what regenerates it).
 
 # IDE
 .vscode/
@@ -52,7 +52,7 @@ Thumbs.db
 logs
 *.log
 
-# Security
+# Security — never commit secrets
 .env
 .env.local
 .env.development.local
@@ -62,29 +62,3 @@ logs
 # Backup files
 *.backup
 *.bak
-
-# jest.setup.js
-import '@testing-library/jest-dom';
-
-// Mock Next.js router
-jest.mock('next/router', () => ({
-  useRouter() {
-    return {
-      route: '/',
-      pathname: '/',
-      query: '',
-      asPath: '',
-      push: jest.fn(),
-      pop: jest.fn(),
-      reload: jest.fn(),
-      back: jest.fn(),
-      prefetch: jest.fn(),
-      beforePopState: jest.fn(),
-      events: {
-        on: jest.fn(),
-        off: jest.fn(),
-        emit: jest.fn(),
-      },
-    };
-  },
-}));
