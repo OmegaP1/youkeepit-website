@@ -13,6 +13,8 @@ npm run lint:fix         # next lint --fix
 npm run type-check       # tsc --noEmit (project is mostly .js but checked via allowJs)
 npm test                 # Jest
 npm run test:watch       # Jest in watch mode
+npm run test:coverage    # Jest with coverage report
+npm run test:ci          # Jest in CI mode (--ci, --coverage, --maxWorkers=2)
 npm run test -- <file>   # Run a single test file
 npm run env:check        # Validate required env vars (scripts/env-check.js)
 npm run env:pull         # Pull env vars from Vercel into .env.local
@@ -62,6 +64,26 @@ When adding a new editable content type, the pattern is: SQL migration in `datab
 
 ### 5. Environment
 Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXTAUTH_SECRET` (≥32 chars), `SESSION_SECRET` (≥32 chars). See `.env.example` and `scripts/env-check.js` for the full list and validation rules. The service role key must never be referenced in code that ships to the client — webpack fallbacks in `next.config.js` already null out `fs/net/tls/crypto` on the client bundle as defense in depth.
+
+## Testing
+
+Test runner is **Jest** with `next/jest` (`jest.config.js`), plus `@testing-library/react` for component tests. Tests live next to the code they cover (`*.test.js` siblings). The project uses **the test pyramid**: most tests are unit/integration with mocked Supabase; E2E is reserved for a future Playwright pass.
+
+**Conventions:**
+
+- API route tests must declare `/** @jest-environment node */` at the top of the file — `next/server` needs Node's `Request`/`Response` polyfills, not jsdom's. Tests build a minimal request shim (`{ json, headers, cookies }`) rather than constructing a real `NextRequest`.
+- Supabase is mocked with [src/test-utils/mockSupabase.js](src/test-utils/mockSupabase.js). `createMockSupabaseClient({ rpc, tables })` returns a fake client whose chained query builders are awaitable. Tests `jest.mock('@/lib/supabase', ...)` to swap in the fake.
+- Service tests follow the same pattern but mock the `supabase` named export instead of `createAdminClient`.
+- Component tests prefer role-based queries (`getByRole('button', { name: /…/ })`) over test IDs. Use `userEvent` from `@testing-library/user-event`, not `fireEvent`.
+- Coverage threshold is set to 50% globally (`jest.config.js`) — raise as the suite grows. Backgrounds, layouts, loading/error pages are excluded from coverage.
+
+**What's covered today** (use `npm test` to run):
+- All admin and company auth API routes (login, validate, logout) — happy paths, error paths, security-critical assertions like `HttpOnly` cookies and email lowercasing.
+- `DatabaseService` — soft-delete contract, error fallback, `updated_at` stamping.
+- `useMessage` hook — auto-clear timer, manual clear, stable refs.
+- `MessageAlert` and `FAQAccordion` — including a regression test for the `null` message crash that broke admin login.
+
+**CI** runs on every push/PR to `main` or `dev` via `.github/workflows/ci.yml`: parallel lint/type-check/test, then build (gated on the others passing). Coverage report is uploaded as a workflow artifact.
 
 ## Database
 

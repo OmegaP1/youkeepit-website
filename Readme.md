@@ -1,3 +1,5 @@
+![CI](https://github.com/OmegaP1/youkeepit-website/actions/workflows/ci.yml/badge.svg)
+
 # 📂 Next.js 14 Project File Structure
 
 ## 🏗️ Project Overview
